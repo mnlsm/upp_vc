@@ -1,0 +1,9 @@
+#include "png.h"
+
+NAMESPACE_UPP
+
+INITBLOCK_(draw_png) {
+	StreamRaster::Register<PNGRaster>();
+}
+
+END_UPP_NAMESPACE

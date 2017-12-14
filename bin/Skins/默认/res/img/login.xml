@@ -1,0 +1,21 @@
+<Grid Background='login_background.png'>
+  <StackPanel Orientation='Horizontal'VerticalAlignment='Top' HorizontalAlignment='Right' Margin='0,8,8,0'>
+    <IButton Name='sysbar_min'>
+      <IButton.Source>
+        <BitmapImage UriSource='d:\sysbar_min.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+    <IButton Name='sysbar_close'>
+      <IButton.Source>
+        <BitmapImage UriSource='d:\sysbar_close.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+
+  </StackPanel>
+  <TextBlock Opacity='228' VerticalAlignment='Top' HorizontalAlignment='Left' FontGlowSize='18' Margin='15,8,0,0' >²úÆ·Ãû³Æ</TextBlock>
+  <IButton  Name='Login' Orientation='Horizontal'VerticalAlignment='Bottom' HorizontalAlignment='Center' Margin='0,0,0,18'>
+    <IButton.Source>
+      <BitmapImage UriSource='d:\common_button.png' SplitValue='3'/>
+    </IButton.Source>
+  </IButton>
+</Grid>

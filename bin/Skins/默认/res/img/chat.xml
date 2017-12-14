@@ -1,0 +1,104 @@
+<Grid Background='d:\chat_background.png'>
+  <StackPanel Orientation='Horizontal'VerticalAlignment='Top' HorizontalAlignment='Right' Margin='0,6,5,0'>
+    <IButton Name='sysbar_min'>
+      <IButton.Source>
+        <BitmapImage UriSource='d:\sysbar_min.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+    <IButton Name='sysbar_max'>
+      <IButton.Source>
+        <BitmapImage UriSource='d:\sysbar_max.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+    <IButton Name='sysbar_close'>
+      <IButton.Source>
+        <BitmapImage UriSource='d:\sysbar_close.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+  </StackPanel>
+
+  <Grid>
+  <Grid.RowDefinitions>
+    <RowDefinition Height="80"/>
+    <RowDefinition Height="*"/>
+    <RowDefinition Height="27"/>
+    <RowDefinition Height="120"/>
+    <RowDefinition Height="40"/>
+  </Grid.RowDefinitions>
+  <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+  </Grid.ColumnDefinitions>
+  <Grid Grid.Row="0" Grid.Column="0">
+    <Grid.RowDefinitions>
+       <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+       <ColumnDefinition Width="80"/>
+       <ColumnDefinition Width="*"/>
+       <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+
+    <Grid Grid.Row="0" Grid.Column="0" HorizontalAlignment="left" VerticalAlignment="Bottom" Width="64" Height="64" Margin="10,0,0,3">
+      <Image Source='d:\chat_UserPhotoFrame.png' Name='UserPhotoFrame'/>
+      <Image Source='d:\user_fang.png' Name='UserPhoto' HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" Height="50"/>
+    </Grid>
+
+    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Bottom" Margin="0,0,0,15">
+      <TextBlock FontSize='12' FontWeight='Bold'>用户名称</TextBlock>
+      <TextBlock FontSize='9'>1今天的心情短语2今天的心情短语</TextBlock>
+    </StackPanel>
+
+    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,14,3">
+      <IButton Name='tool_sendfile' Margin="6,0">
+        <IButton.Source>
+          <BitmapImage UriSource='d:\chat_sendfile.png' SplitValue='3'/>
+        </IButton.Source>
+      </IButton>
+      <IButton Name='tool_remote' Margin="6,0">
+        <IButton.Source>
+          <BitmapImage UriSource='d:\chat_remote.png' SplitValue='3'/>
+        </IButton.Source>
+      </IButton>
+    </StackPanel>
+  </Grid>
+
+  <Grid Grid.Row="2" Grid.Column="0" Background="#fdeedd" Margin="5,0,5,0">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="3,0,0,0">
+      <IButton Name='textbar_font' Margin="5,0,1,0">
+        <IButton.Source>
+          <BitmapImage UriSource='d:\chat_Font.png' SplitValue='3'/>
+        </IButton.Source>
+      </IButton>
+      <IButton Name='textbar_emoticon'  Margin="1,0">
+        <IButton.Source>
+          <BitmapImage UriSource='d:\chat_Emoticon.png' SplitValue='3'/>
+        </IButton.Source>
+      </IButton>
+      <IButton Name='textbar_insertpicture'  Margin="1,0">
+        <IButton.Source>
+          <BitmapImage UriSource='d:\chat_InsertPicture.png' SplitValue='3'/>
+        </IButton.Source>
+      </IButton>
+    </StackPanel>
+  </Grid>
+
+  <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,14,0">
+    <IButton Name='CloseWindow' Margin="6,0">
+      <IButton.Source>
+        <BitmapImage UriSource='d:\common_button.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+    <IButton Name='SendMsg' Margin="6,0,0,0">
+      <IButton.Source>
+        <BitmapImage UriSource='d:\common_button.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+    <IButton Name='SendMsgOption' Margin="0,0,6,0">
+      <IButton.Source>
+        <BitmapImage UriSource='d:\chat_SendOption.png' SplitValue='3'/>
+      </IButton.Source>
+    </IButton>
+  </StackPanel>
+
+</Grid>
+</Grid>

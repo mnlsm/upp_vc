@@ -1,0 +1,53 @@
+# Prerequisites
+*.d
+*.htm
+*.html
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.ilb
+*.ldb
+#*.lib
+
+# Executables
+*.ilk
+*.out
+*.app
+*.xls
+
+
+# VC Temp Files
+*.aps
+*.orig
+*.sdf
+*.suo
+*.vcxproj.user
+*.opensdf
+
+# Project Temp Files
+/debug/*
+/release/*
+/ipch/*
+/bin/gambel/*
+/bin/ZcStatisd.exe

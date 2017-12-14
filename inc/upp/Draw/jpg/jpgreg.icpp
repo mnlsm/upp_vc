@@ -1,0 +1,9 @@
+#include "jpg.h"
+
+NAMESPACE_UPP
+
+INITBLOCK_(draw_jpg) {
+	StreamRaster::Register<JPGRaster>();
+}
+
+END_UPP_NAMESPACE
