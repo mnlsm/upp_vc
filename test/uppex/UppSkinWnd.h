@@ -40,6 +40,10 @@ protected:
     LRESULT OnSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled);
 
 protected:
+    virtual LRESULT OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam);
+
+
+protected:
     LRESULT OnDelayRefreshWindow(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled);
     int delayrefreshnum_;
 
@@ -62,7 +66,7 @@ protected:
 protected:
     virtual void DrawBackground(Upp::Draw& w);
     virtual BOOL CreateChildCtrls(Upp::Ctrl *parent , const Upp::XmlNode &node);
-    virtual BOOL SetCtrlParams(Upp::Ctrl &ctrl , const Upp::XmlNode &node);
+    virtual BOOL SetCtrlParams(Upp::Ctrl* ctrl , const Upp::XmlNode &node);
     virtual void UpdateLayedWindowShow(BYTE byteConstantAlpha);
     virtual void ResetClippings(const Upp::XmlNode &node);
 
@@ -98,6 +102,7 @@ protected:
     BOOL calc_skin_rgn_;
 
     std::vector< ClipRegionData > vClippings_;
+    std::map<std::string, Upp::Ptr<Upp::Ctrl> > vCacheCtrls_;
 
 };
 

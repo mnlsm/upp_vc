@@ -13,6 +13,7 @@
 #pragma comment( lib , "uppricheditd.lib" )
 #pragma comment( lib , "uppreportd.lib" )
 #pragma comment( lib , "zlibd.lib" )
+#pragma comment( lib , "marisad.lib" )
 #else
 #pragma comment( lib , "uppcore.lib" )
 #pragma comment( lib , "uppctrlcore.lib" )
@@ -22,6 +23,7 @@
 #pragma comment( lib , "uppreport.lib" )
 #pragma comment( lib , "upprichedit.lib" )
 #pragma comment( lib , "zlib.lib" )
+#pragma comment( lib , "marisa.lib" )
 #endif
 #include <Core/Core.h>
 #include <Core/zip.h>

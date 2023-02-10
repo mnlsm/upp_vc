@@ -309,6 +309,192 @@ LRESULT AddressBook::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 void OpenPEFile(LPSTR lpExeName, LPSTR lpDllName);
 int AddImportDll(HANDLE hFile, DWORD dwBase, PIMAGE_NT_HEADERS pNTHeader);
 
+
+#define PROCESSOR_FEATURE_MAX 64
+#define MAXIMUM_XSTATE_FEATURES             (64)
+
+typedef struct _KSYSTEM_TIME {
+    ULONG LowPart;
+    LONG High1Time;
+    LONG High2Time;
+} KSYSTEM_TIME, *PKSYSTEM_TIME;
+
+typedef enum _NT_PRODUCT_TYPE {
+    NtProductWinNt = 1,
+    NtProductLanManNt,
+    NtProductServer
+} NT_PRODUCT_TYPE, *PNT_PRODUCT_TYPE;
+
+typedef enum _ALTERNATIVE_ARCHITECTURE_TYPE {
+    StandardDesign,                 // None == 0 == standard design
+    NEC98x86,                       // NEC PC98xx series on X86
+    EndAlternatives                 // past end of known alternatives
+} ALTERNATIVE_ARCHITECTURE_TYPE;
+
+
+typedef struct _XSTATE_FEATURE {
+    ULONG Offset;
+    ULONG Size;
+} XSTATE_FEATURE, *PXSTATE_FEATURE;
+
+typedef struct _XSTATE_CONFIGURATION {
+    // Mask of all enabled features
+    ULONG64 EnabledFeatures;
+
+    // Mask of volatile enabled features
+    ULONG64 EnabledVolatileFeatures;
+
+    // Total size of the save area for user states
+    ULONG Size;
+
+    // Control Flags
+    ULONG OptimizedSave : 1;
+    ULONG CompactionEnabled : 1;
+
+    // List of features
+    XSTATE_FEATURE Features[MAXIMUM_XSTATE_FEATURES];
+
+    // Mask of all supervisor features
+    ULONG64 EnabledSupervisorFeatures;
+
+    // Mask of features that require start address to be 64 byte aligned
+    ULONG64 AlignedFeatures;
+
+    // Total size of the save area for user and supervisor states
+    ULONG AllFeatureSize;
+
+    // List which holds size of each user and supervisor state supported by CPU        
+    ULONG AllFeatures[MAXIMUM_XSTATE_FEATURES];
+
+} XSTATE_CONFIGURATION, *PXSTATE_CONFIGURATION;
+
+
+typedef struct _KUSER_SHARED_DATA {
+  ULONG                         TickCountLowDeprecated;
+  ULONG                         TickCountMultiplier;
+  KSYSTEM_TIME                  InterruptTime;
+  KSYSTEM_TIME                  SystemTime;
+  KSYSTEM_TIME                  TimeZoneBias;
+  USHORT                        ImageNumberLow;
+  USHORT                        ImageNumberHigh;
+  WCHAR                         NtSystemRoot[260];
+  ULONG                         MaxStackTraceDepth;
+  ULONG                         CryptoExponent;
+  ULONG                         TimeZoneId;
+  ULONG                         LargePageMinimum;
+  ULONG                         AitSamplingValue;
+  ULONG                         AppCompatFlag;
+  ULONGLONG                     RNGSeedVersion;
+  ULONG                         GlobalValidationRunlevel;
+  LONG                          TimeZoneBiasStamp;
+  ULONG                         NtBuildNumber;
+  NT_PRODUCT_TYPE               NtProductType;
+  BOOLEAN                       ProductTypeIsValid;
+  BOOLEAN                       Reserved0[1];
+  USHORT                        NativeProcessorArchitecture;
+  ULONG                         NtMajorVersion;
+  ULONG                         NtMinorVersion;
+  BOOLEAN                       ProcessorFeatures[PROCESSOR_FEATURE_MAX];
+  ULONG                         Reserved1;
+  ULONG                         Reserved3;
+  ULONG                         TimeSlip;
+  ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+  ULONG                         BootId;
+  LARGE_INTEGER                 SystemExpirationDate;
+  ULONG                         SuiteMask;
+  BOOLEAN                       KdDebuggerEnabled;
+  union {
+    UCHAR MitigationPolicies;
+    struct {
+      UCHAR NXSupportPolicy : 2;
+      UCHAR SEHValidationPolicy : 2;
+      UCHAR CurDirDevicesSkippedForDlls : 2;
+      UCHAR Reserved : 2;
+    };
+  };
+  USHORT                        CyclesPerYield;
+  ULONG                         ActiveConsoleId;
+  ULONG                         DismountCount;
+  ULONG                         ComPlusPackage;
+  ULONG                         LastSystemRITEventTickCount;
+  ULONG                         NumberOfPhysicalPages;
+  BOOLEAN                       SafeBootMode;
+  union {
+    UCHAR VirtualizationFlags;
+    struct {
+      UCHAR ArchStartedInEl2 : 1;
+      UCHAR QcSlIsSupported : 1;
+    };
+  };
+  UCHAR                         Reserved12[2];
+  union {
+    ULONG SharedDataFlags;
+    struct {
+      ULONG DbgErrorPortPresent : 1;
+      ULONG DbgElevationEnabled : 1;
+      ULONG DbgVirtEnabled : 1;
+      ULONG DbgInstallerDetectEnabled : 1;
+      ULONG DbgLkgEnabled : 1;
+      ULONG DbgDynProcessorEnabled : 1;
+      ULONG DbgConsoleBrokerEnabled : 1;
+      ULONG DbgSecureBootEnabled : 1;
+      ULONG DbgMultiSessionSku : 1;
+      ULONG DbgMultiUsersInSessionSku : 1;
+      ULONG DbgStateSeparationEnabled : 1;
+      ULONG SpareBits : 21;
+    } DUMMYSTRUCTNAME2;
+  } DUMMYUNIONNAME2;
+  ULONG                         DataFlagsPad[1];
+  ULONGLONG                     TestRetInstruction;
+  LONGLONG                      QpcFrequency;
+  ULONG                         SystemCall;
+  ULONG                         Reserved2;
+  ULONGLONG                     SystemCallPad[2];
+  union {
+    KSYSTEM_TIME TickCount;
+    ULONG64      TickCountQuad;
+    struct {
+      ULONG ReservedTickCountOverlay[3];
+      ULONG TickCountPad[1];
+    } DUMMYSTRUCTNAME;
+  } DUMMYUNIONNAME3;
+  ULONG                         Cookie;
+  ULONG                         CookiePad[1];
+  LONGLONG                      ConsoleSessionForegroundProcessId;
+  ULONGLONG                     TimeUpdateLock;
+  ULONGLONG                     BaselineSystemTimeQpc;
+  ULONGLONG                     BaselineInterruptTimeQpc;
+  ULONGLONG                     QpcSystemTimeIncrement;
+  ULONGLONG                     QpcInterruptTimeIncrement;
+  UCHAR                         QpcSystemTimeIncrementShift;
+  UCHAR                         QpcInterruptTimeIncrementShift;
+  USHORT                        UnparkedProcessorCount;
+  ULONG                         EnclaveFeatureMask[4];
+  ULONG                         TelemetryCoverageRound;
+  USHORT                        UserModeGlobalLogger[16];
+  ULONG                         ImageFileExecutionOptions;
+  ULONG                         LangGenerationCount;
+  ULONGLONG                     Reserved4;
+  ULONGLONG                     InterruptTimeBias;
+  ULONGLONG                     QpcBias;
+  ULONG                         ActiveProcessorCount;
+  UCHAR                         ActiveGroupCount;
+  UCHAR                         Reserved9;
+  union {
+    USHORT QpcData;
+    struct {
+      UCHAR QpcBypassEnabled;
+      UCHAR QpcShift;
+    };
+  };
+  LARGE_INTEGER                 TimeZoneBiasEffectiveStart;
+  LARGE_INTEGER                 TimeZoneBiasEffectiveEnd;
+  XSTATE_CONFIGURATION          XState;
+  KSYSTEM_TIME                  FeatureConfigurationChangeStamp;
+  ULONG                         Spare;
+  ULONG64                       UserPointerAuthMask;
+} KUSER_SHARED_DATA, *PKUSER_SHARED_DATA;
+
 GUI_APP_MAIN {
     //int index = Font::FindFaceNameIndex( WString( L"ËÎÌå" ).ToString() );
     //SetStdFont( Font( index , 12 ) );
@@ -322,7 +508,9 @@ GUI_APP_MAIN {
 //   StoreToFile( ab );
     //SetWindowPos
     //WM_KILLFOCUS
-
+    WCHAR szVerifyPath[MAX_PATH];
+    int a = sizeof(szVerifyPath);
+	PKUSER_SHARED_DATA s = (PKUSER_SHARED_DATA)(0x7FFE0000);
 
     String path = GetModuleFileNameA(NULL);
     String skinpath = Upp::AppendFileName(GetFileFolder(path) , FromSystemCharset("skins\\Ä¬ÈÏ\\res.xml"));

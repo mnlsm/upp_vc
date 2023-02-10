@@ -19,88 +19,109 @@ static Ctrl* GetSubCtrlByLayoutId(Ctrl* ctrl , const char *id) {
 }
 
 Upp::Ctrl* CUppSkinWnd::GetCtrlByLayoutId(const char *id) {
-    if(GetLayoutId() == id)
+    if(GetLayoutId() == id) {
         return this;
+    }
+    std::map<std::string, Upp::Ptr<Upp::Ctrl>>::iterator iter = vCacheCtrls_.find(id);
+    if(iter != vCacheCtrls_.end()) {
+        return ~iter->second;    
+    }
     return GetSubCtrlByLayoutId(this , id);
 }
 
 template<class T> T* GetOrCreateCtrl(const XmlNode &node , CUppSkinWnd *wnd) {
     const String &layid = node.Attr("layid");
-    ASSERT(!layid.IsEmpty());
+    const String &layidc = node.Attr("layidc");
+#ifdef _DEBUG
     if(!layid.IsEmpty()) {
         Ctrl *ctrl = wnd->GetCtrlByLayoutId(layid);
-        if(ctrl != NULL)
+        if(ctrl != NULL) {
+            ASSERT(FALSE);
             return dynamic_cast<T*>(ctrl);
+        }
+    }
+    if(!layidc.IsEmpty()) {
+        Ctrl *ctrl = wnd->GetCtrlByLayoutId(layidc);
+        if(ctrl != NULL) {
+            ASSERT(FALSE);
+            return dynamic_cast<T*>(ctrl);
+        }
+    }
+#endif
+    if(!layid.IsEmpty() && !layidc.IsEmpty()) {
+        ASSERT(FALSE);
     }
     return new(std::nothrow) T();
 }
 
-BOOL CUppSkinWnd::SetCtrlParams(Upp::Ctrl &ctrl , const XmlNode &node) {
+BOOL CUppSkinWnd::SetCtrlParams(Upp::Ctrl* ctrl , const XmlNode &node) {
     Size sz(0 , 0);
     Point pt(0 , 0);
-    ctrl.WantFocus(false);
+    ctrl->WantFocus(false);
     for(int i = 0 ; i < node.GetAttrCount() ; i++) {
         const String &attrId = node.AttrId(i);
         const String &attrVal = node.Attr(i);
         if(attrId == "layid") {
-            ctrl.LayoutId(attrVal);
+            ctrl->LayoutId(attrVal);
+        } else if(attrId == "layidc") {
+            ctrl->LayoutId(attrVal);
+            vCacheCtrls_[to_string(attrVal)] = Upp::Ptr<Upp::Ctrl>(ctrl);
+        } else if(attrId == "tip") {
+            ctrl->Tip(attrVal);
         }
-        if(attrId == "tip") {
-            ctrl.Tip(attrVal);
-        }
-        if(attrId == "tabstop") {
-            ctrl.WantFocus(UppUIHelper::ParseBool(attrVal));
+        else if(attrId == "tabstop") {
+            ctrl->WantFocus(UppUIHelper::ParseBool(attrVal));
         }else if(attrId == "HSizePos") {
             sz = UppUIHelper::ParseSize(attrVal);
-            ctrl.HSizePos(sz.cx , sz.cy);
+            ctrl->HSizePos(sz.cx , sz.cy);
         }else if(attrId == "HSizePosZ") {
             sz = UppUIHelper::ParseSize(attrVal);
-            ctrl.HSizePosZ(sz.cx , sz.cy);
+            ctrl->HSizePosZ(sz.cx , sz.cy);
         }else if(attrId == "VSizePos") {
             sz = UppUIHelper::ParseSize(attrVal);
-            ctrl.VSizePos(sz.cx , sz.cy);
+            ctrl->VSizePos(sz.cx , sz.cy);
         }else if(attrId == "VSizePosZ") {
             sz = UppUIHelper::ParseSize(attrVal);
-            ctrl.VSizePosZ(sz.cx , sz.cy);
+            ctrl->VSizePosZ(sz.cx , sz.cy);
         }else if(attrId == "HCenterPos") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.HCenterPos(pt.x , pt.y);
+            ctrl->HCenterPos(pt.x , pt.y);
         }else if(attrId == "HCenterPosZ") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.HCenterPosZ(pt.x , pt.y);
+            ctrl->HCenterPosZ(pt.x , pt.y);
         }else if(attrId == "VCenterPos") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.VCenterPos(pt.x , pt.y);
+            ctrl->VCenterPos(pt.x , pt.y);
         }else if(attrId == "VCenterPosZ") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.VCenterPosZ(pt.x , pt.y);
+            ctrl->VCenterPosZ(pt.x , pt.y);
         }else if(attrId == "LeftPos") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.LeftPos(pt.x , pt.y);
+            ctrl->LeftPos(pt.x , pt.y);
         }else if(attrId == "LeftPosZ") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.LeftPosZ(pt.x , pt.y);
+            ctrl->LeftPosZ(pt.x , pt.y);
         }else if(attrId == "RightPos") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.RightPos(pt.x , pt.y);
+            ctrl->RightPos(pt.x , pt.y);
         }else if(attrId == "RightPosZ") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.RightPosZ(pt.x , pt.y);
+            ctrl->RightPosZ(pt.x , pt.y);
         }else if(attrId == "TopPos") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.TopPos(pt.x , pt.y);
+            ctrl->TopPos(pt.x , pt.y);
         }else if(attrId == "TopPosZ") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.TopPosZ(pt.x , pt.y);
+            ctrl->TopPosZ(pt.x , pt.y);
         }else if(attrId == "BottomPos") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.BottomPos(pt.x , pt.y);
+            ctrl->BottomPos(pt.x , pt.y);
         }else if(attrId == "BottomPosZ") {
             pt = UppUIHelper::ParsePoint(attrVal);
-            ctrl.BottomPosZ(pt.x , pt.y);
+            ctrl->BottomPosZ(pt.x , pt.y);
         }
     }
-    if(ctrl.GetLayoutId().IsEmpty()) {
+    if(ctrl->GetLayoutId().IsEmpty()) {
         ATLASSERT(FALSE);
         return FALSE;
     }
@@ -120,7 +141,7 @@ BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     if(tag == "ParentCtrl") {
         Ptr<ParentCtrl> parentCtrl = GetOrCreateCtrl<ParentCtrl>(node , this);
         if(~parentCtrl == NULL) return FALSE;
-        if(!SetCtrlParams(*parentCtrl , node)) return FALSE;
+        if(!SetCtrlParams(parentCtrl , node)) return FALSE;
         for(int child_i = 0 ; child_i < node.GetCount() ; child_i++) {
             if(!CreateChildCtrls(~parentCtrl , node.Node(child_i)))
                 return FALSE;
@@ -130,7 +151,7 @@ BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     if(tag == "ParentCtrlEx") {
         Ptr<ParentCtrlEx> parentCtrl = GetOrCreateCtrl<ParentCtrlEx>(node , this);
         if(~parentCtrl == NULL) return FALSE;
-        if(!SetCtrlParams(*parentCtrl , node)) return FALSE;
+        if(!SetCtrlParams(parentCtrl , node)) return FALSE;
         String layid = parentCtrl->GetLayoutId();
         if(layid == "sys_titlebar") titlebar_ = parentCtrl;
         for(int child_i = 0 ; child_i < node.GetCount() ; child_i++) {
@@ -141,22 +162,26 @@ BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     }else if(tag == "Button") {
         Ptr<Button> button = GetOrCreateCtrl<Button>(node , this);
         if(~button == NULL) return FALSE;
-        if(!SetCtrlParams(*button , node)) return FALSE;
-        button->NoWantFocus();
+        if(!SetCtrlParams(button , node)) return FALSE;
         String layid = button->GetLayoutId();
         if(layid == "sys_closebtn") {
+            button->NoWantFocus();
             closeboxbtn_ = button;
             NoCloseBox(false);
         }else if(layid == "sys_minbtn") {
+            button->NoWantFocus();
             minboxbtn_ = button;
             minboxbtn_->NoWantFocus();
             MinimizeBox(true);
         }else if(layid == "sys_maxbtn") {
+            button->NoWantFocus();
             maxboxbtn_ = button;
             MaximizeBox(true);
         }else if(layid == "sys_restorebtn") {
+            button->NoWantFocus();
             restoreboxbtn_ = button;
         }else if(layid == "sys_sizebtn") {
+            button->NoWantFocus();
             sizeboxbtn_ = button;
             sizeboxbtn_->Show(true);
             sizeboxbtn_->Enable(false);
@@ -170,14 +195,14 @@ BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     }else if(tag == "EditField") {
         Ptr<EditField> edit = GetOrCreateCtrl<EditField>(node , this);
         if(~edit == NULL) return FALSE;
-        if(!SetCtrlParams(*edit , node)) return FALSE;
-//      edit->SetFrame( NullFrame() );
+        if(!SetCtrlParams(edit , node)) return FALSE;
+//        edit->SetFrame( NullFrame() );
         edit->NoBackground(true);
         parent->AddChild(~edit);
     }else if(tag == "WithDropChoice") {
         Ptr< WithDropChoice< EditString > > withdropchoice = GetOrCreateCtrl< WithDropChoice< EditString > >(node , this);
         if(~withdropchoice == NULL) return FALSE;
-        if(!SetCtrlParams(*withdropchoice , node)) return FALSE;
+        if(!SetCtrlParams(withdropchoice , node)) return FALSE;
         withdropchoice->AddList("ssss");
         withdropchoice->AddList("aaaa");
         withdropchoice->SetLineCy(20);

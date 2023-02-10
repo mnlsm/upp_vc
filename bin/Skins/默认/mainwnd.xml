@@ -21,9 +21,10 @@
     <Button layid='sys_restorebtn' tip='向下还原' skin='sys_restorebtn' RightPos='39,31' TopPos='0,25'/>
     <Button layid='sys_minbtn' tip='最小化' skin='sys_minbtn' RightPos='71,31' TopPos='0,25'/>
   </ParentCtrlEx>
-  <!--<EditField layid='inputname' HCenterPos='100,0' TopPos='100,20' tabstop='true'/>-->
-  <WithDropChoice layid='userlist' HCenterPos='100,0' TopPos='130,20' tabstop='true'/>
   <Button layid='sys_sizebtn' skin='sys_sizebtn' RightPos='1,4' BottomPos='1,4'/>
+  <EditField layid='inputname' HCenterPos='100,0' TopPos='100,20' tabstop='true'/>
+  <WithDropChoice layid='userlist' HCenterPos='100,0' TopPos='140,20' tabstop='true'/>
+  <Button layidc='testbtn' label='测试' HSizePos='30,30' TopPos='170,24' tabstop='true'/>
 </ParentCtrlEx>
 
 </SkinWnd>

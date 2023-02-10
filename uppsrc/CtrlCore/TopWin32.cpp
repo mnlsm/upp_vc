@@ -64,7 +64,7 @@ LRESULT TopWindow::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
 void TopWindow::SyncTitle0() {
     GuiLock __;
     HWND hwnd = GetHWND();
-    if(hwnd) {
+    if(hwnd && IsWindow(hwnd)) {
         if(IsWindowUnicode(hwnd)) {
             ::SetWindowTextW(hwnd, (const WCHAR*)~title);
         }else {

@@ -54,6 +54,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uppreport", "uppsrc\Report\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "upppdfdraw", "uppsrc\PdfDraw\upppdfdraw.vcproj", "{FE78404F-B368-4A0E-85D9-693F56FDD632}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "marisa", "thirdpart\marisa\marisa.vcproj", "{2235A5CE-B563-4422-9A5E-E6129F7C8437}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -100,6 +102,10 @@ Global
 		{FE78404F-B368-4A0E-85D9-693F56FDD632}.Debug|Win32.Build.0 = Debug|Win32
 		{FE78404F-B368-4A0E-85D9-693F56FDD632}.Release|Win32.ActiveCfg = Release|Win32
 		{FE78404F-B368-4A0E-85D9-693F56FDD632}.Release|Win32.Build.0 = Release|Win32
+		{2235A5CE-B563-4422-9A5E-E6129F7C8437}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2235A5CE-B563-4422-9A5E-E6129F7C8437}.Debug|Win32.Build.0 = Debug|Win32
+		{2235A5CE-B563-4422-9A5E-E6129F7C8437}.Release|Win32.ActiveCfg = Release|Win32
+		{2235A5CE-B563-4422-9A5E-E6129F7C8437}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,5 +121,6 @@ Global
 		{FE78404F-B368-4A0E-85D9-693F56FDD632} = {94296D6A-1D1B-42F7-B375-D8136D1795BD}
 		{B62E56D3-FADB-45B9-969C-9E25701F334A} = {0FAE67FB-C980-4318-828A-501959F69FDC}
 		{CF9B43B0-1691-47A9-BE4F-A43AE3807A94} = {4F235FFF-CA0E-4A35-B436-EE1F2A9C8B93}
+		{2235A5CE-B563-4422-9A5E-E6129F7C8437} = {4F235FFF-CA0E-4A35-B436-EE1F2A9C8B93}
 	EndGlobalSection
 EndGlobal

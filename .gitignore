@@ -44,6 +44,8 @@
 *.suo
 *.vcxproj.user
 *.opensdf
+*.ncb
+*.user
 
 # Project Temp Files
 /debug/*
@@ -51,3 +53,6 @@
 /ipch/*
 /bin/gambel/*
 /bin/ZcStatisd.exe
+/obj/*
+/bin/test*
+/lib/*

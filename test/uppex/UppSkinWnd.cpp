@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UppSkinWnd.h"
 #include "UppSkinMgr.h"
+#include "resource.h"
 
 using namespace Upp;
 
@@ -67,14 +68,20 @@ BOOL CUppSkinWnd::BuildFromXml(const char *xmlstr) {
     bool _toolwnd = false;
     bool _frameless = false;
     bool _fullscreen = false;
+    LargeIcon(Win32Icon(IDI_MAINICON, GetSystemMetrics(SM_CXICON)));
+    Icon(Win32Icon(IDI_MAINICON, GetSystemMetrics(SM_CXSMICON)));
     for(int attr_i = 0 ; attr_i < wndNode.GetAttrCount() ; attr_i++) {
         String attrTag = wndNode.AttrId(attr_i);
         String attrVal = wndNode.Attr(attr_i);
-        if(attrTag == "layid") LayoutId(attrVal);
-        else if(attrTag == "skin") {
+        if(attrTag == "layid") {
+            LayoutId(attrVal);
+        } else if(attrTag == "layidc") {
+            LayoutId(attrVal);
+        } else if(attrTag == "skin") {
             SetStyle(theSkinMgr.GetUppSkinWndStyle(attrVal));
             szImg = skinstyle_.GetImageSize();
-        }else if(attrTag == "defsize") szDef = UppUIHelper::ParseSize(attrVal);
+        }
+        else if(attrTag == "defsize") szDef = UppUIHelper::ParseSize(attrVal);
         else if(attrTag == "minsize") szMin = UppUIHelper::ParseSize(attrVal);
         else if(attrTag == "sizeable") _sizeable = UppUIHelper::ParseBool(attrVal) ;
         else if(attrTag == "toolwnd") _toolwnd =  UppUIHelper::ParseBool(attrVal) ;
@@ -106,8 +113,9 @@ BOOL CUppSkinWnd::BuildFromXml(const char *xmlstr) {
     }
     vClippings_.clear();
     for(int child_i = 0 ; child_i < wndNode.GetCount() ; child_i++) {
-        if(!CreateChildCtrls(this , wndNode.Node(child_i)))
+        if(!CreateChildCtrls(this , wndNode.Node(child_i))) {
             return FALSE;
+        }
     }
     Sizeable(_sizeable).ToolWindow(_toolwnd).FrameLess(_frameless);/*.FullScreen( _fullscreen )*/;
     SetMinSize(szMin);
@@ -267,6 +275,9 @@ LRESULT CUppSkinWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
     }
     if(!bHandled)
         lRet = BaseWnd::WindowProc(message, wParam, lParam);
+    if(message == WM_CREATE) {
+        OnCreateFinished(message, wParam, lParam);
+    }
     return lRet;
 }
 
@@ -474,6 +485,12 @@ LRESULT CUppSkinWnd::OnNcMouseEvent1(UINT message, WPARAM wParam, LPARAM lParam 
     return 0L;
 }
 
+LRESULT CUppSkinWnd::OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam) {
+    SyncCaption();
+    SyncTitle();
+    return 1L;
+}
+
 void CUppSkinWnd::Paint(Draw& w) {
     if(IsIconic(GetHWND()))
         return;
@@ -486,6 +503,9 @@ void CUppSkinWnd::SyncCaption() {
     if(fullscreen)
         return;
     HWND hwnd = GetHWND();
+    if(!IsWindow(hwnd)) {
+        return;
+    }
     if(hwnd) {
         style = ::GetWindowLong(hwnd, GWL_STYLE);
         exstyle = ::GetWindowLong(hwnd, GWL_EXSTYLE);
@@ -644,3 +664,20 @@ Size CUppSkinWnd::Style::GetImageSize() {
     }
     return sz;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+void Common::Util::SetWindowIconTitle(HWND hwnd, UINT iconID, LPCTSTR title) {
+    CWindow wnd(hwnd);
+    if (!wnd.IsWindow()) {
+        return;
+    }
+    HICON hIconBig = AtlLoadIconImage(iconID, LR_DEFAULTCOLOR | LR_SHARED, 
+        GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
+    wnd.SetIcon(hIconBig, TRUE);
+    HICON hIconSmall = AtlLoadIconImage(iconID, LR_DEFAULTCOLOR | LR_SHARED, 
+        GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CXSMICON));
+    wnd.SetIcon(hIconSmall, FALSE);
+    wnd.SetWindowText(title);
+}
+*/
