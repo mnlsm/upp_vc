@@ -320,29 +320,7 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
     String xmlstr;
     try {
         String resid_key("res.xml");
-        size_t resid_key_length = resid_key.GetLength() + 1;
-        marisa::Agent agent;
-        agent.set_query(~resid_key, resid_key_length);
-        if(!trie.predictive_search(agent)) {
-            assert(false);
-            return FALSE;
-        }
-        xmlstr.Insert(0, (agent.key().ptr() + resid_key_length), agent.key().length() - resid_key_length);
-        AdjustMarisaInnerFileData(xmlstr);
-
-        bool hasBOM = false;
-        const unsigned char bom[] = {0xef, 0xbb, 0xbf, 0xbf, 0xbb, 0xef};
-        if(xmlstr.GetLength() >= 3) {
-            if(memcmp(~xmlstr, bom, 3) == 0) {
-                hasBOM = true;
-            } else if(memcmp(~xmlstr, bom + 3, 3) == 0) {
-                hasBOM = true;
-            }
-        }
-        if(hasBOM) {
-            xmlstr.Remove(0, 3);
-        }
-        xmlstr.Cat(1, '\0');
+        UppUIHelper::ExtraXmlFromTrie(trie, resid_key, xmlstr);
     } catch(marisa::Exception& e) {
         assert(false);
         e;
@@ -583,6 +561,25 @@ BOOL UppUIHelper::ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& k
     return TRUE;
 }
 
+BOOL UppUIHelper::ExtraXmlFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& xmlstr) {
+    if(!ExtraDataFromTrie(trie, key, xmlstr)) {
+        return FALSE;
+    }    
+    bool hasBOM = false;
+    const unsigned char bom[] = {0xef, 0xbb, 0xbf, 0xbf, 0xbb, 0xef};
+    if(xmlstr.GetLength() >= 3) {
+        if(memcmp(~xmlstr, bom, 3) == 0) {
+            hasBOM = true;
+        } else if(memcmp(~xmlstr, bom + 3, 3) == 0) {
+            hasBOM = true;
+        }
+    }
+    if(hasBOM) {
+        xmlstr.Remove(0, 3);
+    }
+    xmlstr.Cat(1, '\0');
+    return TRUE;
+}
 
 BOOL UppUIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
     Size sz(0 , 0);

@@ -83,6 +83,7 @@ public:
     static BOOL LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , UppResData *ret);
     static BOOL ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& filedata);
     static BOOL ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::Image& image);
+    static BOOL ExtraXmlFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& xmlstr);
 
 public:
     static BOOL SetCtrlParam(Upp::Ctrl* ctrl, Upp::String attrId, Upp::String attrVal);

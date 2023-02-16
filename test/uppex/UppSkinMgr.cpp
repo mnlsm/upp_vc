@@ -164,28 +164,7 @@ Upp::Image CUppSkinMgr::ExtractCursor(Upp::String id) {
 Upp::String CUppSkinMgr::ExtractLayoutXml(Upp::String id) {
     String xmlstr;
     try {
-        marisa::Agent agent;
-        size_t keylen = id.GetLength() + 1;
-        agent.set_query(~id, keylen);
-        if(!trie_.predictive_search(agent)) {
-            assert(false);
-            return FALSE;
-        }
-        xmlstr.Insert(0, (agent.key().ptr() + keylen), agent.key().length() - keylen);
-        UppUIHelper::AdjustMarisaInnerFileData(xmlstr);
-        bool hasBOM = false;
-        const unsigned char bom[] = {0xef, 0xbb, 0xbf, 0xbf, 0xbb, 0xef};
-        if(xmlstr.GetLength() >= 3) {
-            if(memcmp(~xmlstr, bom, 3) == 0) {
-                hasBOM = true;
-            } else if(memcmp(~xmlstr, bom + 3, 3) == 0) {
-                hasBOM = true;
-            }
-        }
-        if(hasBOM) {
-            xmlstr.Remove(0, 3);
-        }
-        xmlstr.Cat(1, '\0');
+        UppUIHelper::ExtraXmlFromTrie(trie_, id, xmlstr);
     } catch(marisa::Exception& e) {
         assert(false);
         e;
