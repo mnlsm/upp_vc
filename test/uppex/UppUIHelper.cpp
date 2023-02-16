@@ -319,14 +319,15 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
 BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , UppResData *ret) {
     String xmlstr;
     try {
-        const char *res = "res.xml";
+        String resid_key("res.xml");
+        size_t resid_key_length = resid_key.GetLength() + 1;
         marisa::Agent agent;
-        agent.set_query(res, strlen(res) + 1);
+        agent.set_query(~resid_key, resid_key_length);
         if(!trie.predictive_search(agent)) {
             assert(false);
             return FALSE;
         }
-        xmlstr.Insert(0, (agent.key().ptr() + strlen(res) + 1), agent.key().length() - strlen(res) - 1);
+        xmlstr.Insert(0, (agent.key().ptr() + resid_key_length), agent.key().length() - resid_key_length);
         AdjustMarisaInnerFileData(xmlstr);
 
         bool hasBOM = false;

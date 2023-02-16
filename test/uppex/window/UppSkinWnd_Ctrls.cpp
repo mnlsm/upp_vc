@@ -2,9 +2,6 @@
 #include "UppSkinWnd.h"
 #include "../UppSkinMgr.h"
 
-//#include "ParentCtrlEx.h"
-
-
 using namespace Upp;
 #define LLOG(x)
 
@@ -80,8 +77,6 @@ void CUppSkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
     }
 }
 
-
-
 BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     const String& tag = node.GetTag();
     if(tag == "wndclippings") {
@@ -99,84 +94,6 @@ BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
             }
         }
     }
-
-/*
-    if(tag == "ParentCtrl") {
-        Ptr<ParentCtrl> parentCtrl = GetOrCreateCtrl<ParentCtrl>(node , this);
-        if(~parentCtrl == NULL) return FALSE;
-        if(!SetCtrlParams(parentCtrl , node)) return FALSE;
-        for(int child_i = 0 ; child_i < node.GetCount() ; child_i++) {
-            if(!CreateChildCtrls(~parentCtrl , node.Node(child_i)))
-                return FALSE;
-        }
-        parent->AddChild(~parentCtrl);
-        subctrls_.push_back(std::tr1::shared_ptr<Upp::Ctrl>(~parentCtrl));
-    }
-    if(tag == "ParentCtrlEx") {
-        //Ptr<ParentCtrlEx> parentCtrl = GetOrCreateCtrl<ParentCtrlEx>(node , this);
-        ParentCtrlEx* parentCtrl = GetOrCreateCtrl<ParentCtrlEx>(node , this);
-        //parentCtrl.      
-        if(parentCtrl == NULL) return FALSE;
-        if(!SetCtrlParams(parentCtrl , node)) return FALSE;
-        String layid = parentCtrl->GetLayoutId();
-        if(layid == "sys_titlebar") titlebar_ = parentCtrl;
-        for(int child_i = 0 ; child_i < node.GetCount() ; child_i++) {
-            if(!CreateChildCtrls(parentCtrl , node.Node(child_i)))
-                return FALSE;
-        }
-        parent->AddChild(parentCtrl);
-        subctrls_.push_back(std::tr1::shared_ptr<Upp::Ctrl>(parentCtrl));
-    }else if(tag == "Button") {
-        Ptr<Button> button = GetOrCreateCtrl<Button>(node , this);
-        if(~button == NULL) return FALSE;
-        if(!SetCtrlParams(button , node)) return FALSE;
-        String layid = button->GetLayoutId();
-        if(layid == "sys_closebtn") {
-            button->NoWantFocus();
-            closeboxbtn_ = button;
-            NoCloseBox(false);
-        }else if(layid == "sys_minbtn") {
-            button->NoWantFocus();
-            minboxbtn_ = button;
-            minboxbtn_->NoWantFocus();
-            MinimizeBox(true);
-        }else if(layid == "sys_maxbtn") {
-            button->NoWantFocus();
-            maxboxbtn_ = button;
-            MaximizeBox(true);
-        }else if(layid == "sys_restorebtn") {
-            button->NoWantFocus();
-            restoreboxbtn_ = button;
-        }else if(layid == "sys_sizebtn") {
-            button->NoWantFocus();
-            sizeboxbtn_ = button;
-            sizeboxbtn_->Show(true);
-            sizeboxbtn_->Enable(false);
-        }
-        String skin = node.Attr("skin");
-        if(!skin.IsEmpty()) button->SetStyle(theSkinMgr.GetButtonStyle(skin));
-        else button->SetStyle(theSkinMgr.GetButtonStyle("normal"));
-        String attrVal = node.Attr("label");
-        if(!attrVal.IsEmpty()) button->SetLabel(attrVal);
-        parent->AddChild(~button);
-    }else if(tag == "EditField") {
-        Ptr<EditField> edit = GetOrCreateCtrl<EditField>(node , this);
-        if(~edit == NULL) return FALSE;
-        if(!SetCtrlParams(edit , node)) return FALSE;
-//        edit->SetFrame( NullFrame() );
-        edit->NoBackground(true);
-        parent->AddChild(~edit);
-    }else if(tag == "WithDropChoice") {
-        Ptr< WithDropChoice< EditString > > withdropchoice = GetOrCreateCtrl< WithDropChoice< EditString > >(node , this);
-        if(~withdropchoice == NULL) return FALSE;
-        if(!SetCtrlParams(withdropchoice , node)) return FALSE;
-        withdropchoice->AddList("ssss");
-        withdropchoice->AddList("aaaa");
-        withdropchoice->SetLineCy(20);
-        withdropchoice->SetFocus();
-        parent->AddChild(~withdropchoice);
-    }*/
-
     return TRUE;
 }
 // transcolor='255,0,255'
