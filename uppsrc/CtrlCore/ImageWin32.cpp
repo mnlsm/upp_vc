@@ -431,7 +431,7 @@ ImageDraw::~ImageDraw() {
 
 
 
-static Image sWin32Icon(HICON icon, bool cursor) {
+Image sWin32Icon(HICON icon, bool cursor) {
     GuiLock __;
     ICONINFO iconinfo;
     if(!icon || !GetIconInfo(icon, &iconinfo))

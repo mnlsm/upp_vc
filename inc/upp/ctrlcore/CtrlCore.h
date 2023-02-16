@@ -685,6 +685,9 @@ public:
     static Ctrl  *CtrlFromHWND(HWND hwnd);
     typedef Ctrl CLASSNAME;
 
+    virtual BOOL SetAttrParam(BOOL bSetPrev, String attrId, String attrVal) {return TRUE;}
+    virtual void OnSubCtrlCreate(Ctrl* c, const XmlNode &node) {}
+
 private:
     void    DoRemove();
 

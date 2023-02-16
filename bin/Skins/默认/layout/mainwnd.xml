@@ -1,0 +1,30 @@
+﻿<SkinWnd layid='mainwnd' title='奇虎IM' wndsize='200,100' minsize='80,20' sizeable='true' 
+		 toolwnd='false' frameless='false' fullscreen='false' mouseclientmove='true' 
+		 topborder='4' bottomborder='4' leftborder='4' rightborder='4' 
+		 skin='wnd_background_color_grid' skinalpha='false' constalpha='255' calc_skin_rgn='false'>
+
+<wndclippings>
+<item LeftPos='0,1' TopPos='0,1'/>
+<item LeftPos='1,1' TopPos='1,1'/>
+<item RightPos='0,1' TopPos='0,1'/>
+<item RightPos='1,1' TopPos='1,1'/>
+<item LeftPos='0,1' BottomPos='0,1'/>
+<item LeftPos='1,1' BottomPos='1,1'/>
+<item RightPos='0,1' BottomPos='0,1'/>
+<item RightPos='1,1' BottomPos='1,1'/>
+</wndclippings>
+
+<ParentCtrlEx layid='wnd_bkgnd' HSizePos='0,0' VSizePos='0,0'>
+  <ParentCtrlEx layid='sys_titlebar' HSizePos='0,0' TopPos='0,27'>
+    <Button layid='sys_closebtn' tip='关闭' skin='sys_closebtn' RightPos='0,39' TopPos='0,25'/>
+    <Button layid='sys_maxbtn' tip='最大化' skin='sys_maxbtn' RightPos='39,31' TopPos='0,25'/>
+    <Button layid='sys_restorebtn' tip='向下还原' skin='sys_restorebtn' RightPos='39,31' TopPos='0,25'/>
+    <Button layid='sys_minbtn' tip='最小化' skin='sys_minbtn' RightPos='71,31' TopPos='0,25'/>
+  </ParentCtrlEx>
+  <Button layid='sys_sizebtn' skin='sys_sizebtn' RightPos='1,4' BottomPos='1,4'/>
+  <EditField layidc='inputname' HCenterPos='100,0' TopPos='100,20' tabstop='true'/>
+  <WithDropChoice layidc='userlist' HCenterPos='100,0' TopPos='140,20' tabstop='true'/>
+  <Button layidc='testbtn' label='测试' HSizePos='30,30' TopPos='170,24' tabstop='true'/>
+</ParentCtrlEx>
+
+</SkinWnd>

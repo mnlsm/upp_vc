@@ -194,28 +194,30 @@ Size DrawLabel::Paint(Draw& w, const Rect& r, bool visibleaccesskey) const {
     if(IsNull(color))
         color = disabled ? SColorDisabled : SColorLabel; /////////
     int ix;
-    if(IsNull(lspc))
+    if(IsNull(lspc)) {
         ix = r.left + push;
-    else {
+    } else {
         ix = p.x + push;
         p.x += sz1.cx;
         p.x += lspc;
     }
     int iy = push + (r.top + r.bottom - sz1.cy) / 2;
 
-    if(sz1.cx)
+    if(sz1.cx) {
         if(IsNull(lcolor))
             w.DrawImage(ix, iy, DisabledImage(limg, disabled));
         else
             w.DrawImage(ix, iy, limg, lcolor);
+    }
 
     iy = push + (r.top + r.bottom - sz2.cy) / 2;
     ix = (IsNull(rspc) ? r.right - sz2.cx : p.x + txtsz.cx + rspc) + push;
-    if(sz2.cx)
+    if(sz2.cx) {
         if(IsNull(rcolor))
             w.DrawImage(ix, iy, DisabledImage(rimg, disabled));
         else
             w.DrawImage(ix, iy, rimg, rcolor);
+    }
     paintrect.Paint(w, p.x + push, p.y + push, txtsz.cx, isz.cy, color, Null);
     if(*text) {
         if(disabled)

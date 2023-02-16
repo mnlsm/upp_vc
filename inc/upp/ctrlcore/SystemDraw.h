@@ -114,6 +114,8 @@ void DrawDragRect(SystemDraw& w, const Rect& rect1, const Rect& rect2, const Rec
 void SetSurface(Draw& w, const Rect& dest, const RGBA *pixels, Size srcsz, Point poff);
 void SetSurface(Draw& w, int x, int y, int cx, int cy, const RGBA *pixels);
 
+Image sWin32Icon(HICON icon, bool cursor);
+
 END_UPP_NAMESPACE
 
 #endif

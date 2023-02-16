@@ -7,7 +7,7 @@
 #include <draw/draw.h>
 
 
-#include "uppex/UppSkinWnd.h"
+#include "uppex/window/UppSkinWnd.h"
 #include "uppex/UppSkinMgr.h"
 using namespace Upp;
 
@@ -60,8 +60,8 @@ void AddressBook::Layout() {
 AddressBook::AddressBook() {
     String skinpath = GetModuleFileNameA(NULL);
     skinpath = Upp::AppendFileName(GetFileFolder(skinpath) , FromSystemCharset("skins\\默认\\res.xml"));
-    theSkinMgr.LoadSkinFromXmlFile(FromSystemCharset("默认") , skinpath  , true);
-    modify.add.SetStyle(theSkinMgr.GetButtonStyle("normal"));
+    theSkinMgr.LoadSkinFromXmlFile(skinpath  , true);
+    //modify.add.SetStyle(theSkinMgr.GetButtonStyle("normal"));
 
     CtrlLayout(*this, "Address book");
     CtrlLayout(modify);
@@ -508,20 +508,31 @@ GUI_APP_MAIN {
 //   StoreToFile( ab );
     //SetWindowPos
     //WM_KILLFOCUS
+    using namespace Uppex;
+    InitializeUppCtrlCreators();
     WCHAR szVerifyPath[MAX_PATH];
     int a = sizeof(szVerifyPath);
 	PKUSER_SHARED_DATA s = (PKUSER_SHARED_DATA)(0x7FFE0000);
 
     String path = GetModuleFileNameA(NULL);
     String skinpath = Upp::AppendFileName(GetFileFolder(path) , FromSystemCharset("skins\\默认\\res.xml"));
-    theSkinMgr.LoadSkinFromXmlFile(FromSystemCharset("默认") , skinpath  , true);
+    theSkinMgr.LoadSkinFromXmlFile(skinpath  , true);
+
+    String respath = Upp::AppendFileName(GetFileFolder(path), FromSystemCharset("skins\\默认"));
+    String outpath = Upp::AppendFileName(GetFileFolder(respath), FromSystemCharset("default.mrs"));
+
+    theSkinMgr.CreateSkinToMarisaFile(respath, outpath);
+    theSkinMgr.LoadSkinFromMarisaFile(~outpath);
 
     String main_path = Upp::AppendFileName(GetFileFolder(path) , FromSystemCharset("skins\\默认\\mainwnd.xml"));
 
-    CUppSkinWnd wnd;
-    wnd.BuildFromXmlFile(main_path , true);
-
-    wnd.Run();
+    if(true) {
+        CUppSkinWnd wnd;
+        //wnd.BuildFromXmlFile(main_path , true);
+        wnd.BuildFromSkinLayout("layout/mainwnd.xml");
+        wnd.Run();
+    }
+    return ;
 }
 
 //struct MyApp : TopWindow {

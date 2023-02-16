@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="$(SolutionDir)inc\upp;."
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)inc\upp&quot;;.;&quot;$(SolutionDir)thirdpart\marisa&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -121,7 +121,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="2"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="$(SolutionDir)inc\upp;."
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)inc\upp&quot;;.;&quot;$(SolutionDir)thirdpart\marisa&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -276,19 +276,11 @@
 			Name="uppex"
 			>
 			<File
-				RelativePath=".\uppex\ParentCtrlEx.cpp"
+				RelativePath=".\uppex\UppCtrlCreator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\ParentCtrlEx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\uppex\UppResMgr.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\uppex\UppResMgr.h"
+				RelativePath=".\uppex\UppCtrlCreator.h"
 				>
 			</File>
 			<File
@@ -300,18 +292,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\UppSkinWnd.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\uppex\UppSkinWnd.h"
-				>
-			</File>
-			<File
-				RelativePath=".\uppex\UppSkinWnd_Ctrls.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\uppex\UppUIHelper.cpp"
 				>
 			</File>
@@ -319,6 +299,38 @@
 				RelativePath=".\uppex\UppUIHelper.h"
 				>
 			</File>
+			<Filter
+				Name="controls"
+				>
+				<Filter
+					Name="container"
+					>
+					<File
+						RelativePath=".\uppex\controls\container\UppParentCtrlEx.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\uppex\controls\container\UppParentCtrlEx.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="window"
+				>
+				<File
+					RelativePath=".\uppex\window\UppSkinWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\uppex\window\UppSkinWnd.h"
+					>
+				</File>
+				<File
+					RelativePath=".\uppex\window\UppSkinWnd_Ctrls.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

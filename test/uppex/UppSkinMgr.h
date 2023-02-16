@@ -1,62 +1,55 @@
 #ifndef UPPSKINMGR_H__
 #define UPPSKINMGR_H__
-#include <core/core.h>
-#include <draw/Draw.h>
-#include <ctrlcore/SystemDraw.h>
-#include <ctrllib/CtrlLib.h>
+
+
 #include "UppUIHelper.h"
-#include "UppResMgr.h"
-
-#include "UppSkinWnd.h"
+#include "UppCtrlCreator.h"
 
 
 
-class CUppSkinWnd;
+NAMESPACE_UPPEX
 
 class CUppSkinMgr
         : Upp::NoCopy {
-private:
+public:
     CUppSkinMgr();
     ~CUppSkinMgr();
 
 public:
     static CUppSkinMgr& GetInstance();
-
+    void Swap(CUppSkinMgr& other);
 
 public:
-    BOOL LoadSkinFromXmlFile(const char *skinname , const char *xmlfile , bool filebom);
+    BOOL CreateSkinToMarisaFile(const char* skinpath, const char* outfile);
+    BOOL LoadSkinFromMarisaFile(const char *mrsfile);
 
+    BOOL LoadSkinFromXmlFile(const char *xmlfile , bool filebom);
 
 public:
     const char* GetName();
     Upp::Color ExtractColor(Upp::String id , Upp::byte alpha = 0xFF);
     Upp::Image ExtractImage(Upp::String id);
     Upp::Font  ExtractFont(Upp::String id);
+    Upp::Image ExtractSmallIcon(Upp::String id);
+    Upp::Image ExtractLargeIcon(Upp::String id);
+    Upp::Image ExtractCursor(Upp::String id);
 
-
-public:
-    const Upp::Button::Style& GetButtonStyle(const char* style_str);
-    const CUppSkinWnd::Style& GetUppSkinWndStyle(const char* style_str);
-
-
-private:
-    void RefreshCtrlStyles();
+    Upp::String ExtractLayoutXml(Upp::String id);
 
 private:
-    UppResData resdata_;
-
-    typedef stdext::hash_map< std::string , std::tr1::shared_ptr<Upp::Button::Style> > CButtonStyleMap;
-    CButtonStyleMap button_styles_;
-    typedef stdext::hash_map< std::string , std::tr1::shared_ptr< CUppSkinWnd::Style > > CWindowStyleMap;
-    CWindowStyleMap wnd_styles_;
-
-    Upp::String skinname_;
     Upp::String skinpath_;
+    UppResData resdata_;
+    marisa::SecTrie trie_;
+    Upp::String trie_filedata_;
 
 };
 
+END_UPPEX_NAMESPACE
 
-
+#ifdef flagNONAMESPACE
 #define theSkinMgr CUppSkinMgr::GetInstance()
+#else
+#define theSkinMgr Uppex::CUppSkinMgr::GetInstance()
+#endif
 
 #endif

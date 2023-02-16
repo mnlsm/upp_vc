@@ -5,40 +5,70 @@
 
 using namespace Upp;
 
-UppUIHelper::UppUIHelper() {
+NAMESPACE_UPPEX
 
+UppUIHelper::UppUIHelper() {
 }
 
 UppUIHelper::~UppUIHelper() {
+}
 
+void UppUIHelper::AdjustMarisaInnerFileData(Upp::String& filedata) {
+    char mask = (char)(filedata.GetLength() % 0xFF);
+    for(size_t ii = 0; ii < filedata.GetLength(); ii++) {
+        filedata.Set(ii, (filedata[ii] ^ mask));
+    }
 }
 
 Upp::RGBA UppUIHelper::ParseColor(const char *str , bool *suc) {
     RGBA rgba ;
     rgba.r = rgba.g = rgba.b = 0x00;
-    rgba.a = 0x00;
-    if(str == NULL)
+    rgba.a = 0xFF;
+    if(str == NULL) {
         UPP_BOOL_RETURN(rgba , suc , false);
+    }
+    String ustr(str);
+    TrimBoth(ustr);
+    if(ustr.StartsWith("0x") ||ustr.StartsWith("0X") || ustr.StartsWith("#")) {
+        char* h = NULL;
+        if(ustr.GetLength() == 8) {
+            rgba.r = (Upp::byte)strtol(ustr.Mid(2, 2), &h, 16);
+            rgba.g = (Upp::byte)strtol(ustr.Mid(4, 2), &h, 16);
+            rgba.b = (Upp::byte)strtol(ustr.Mid(6, 2), &h, 16);
+            UPP_BOOL_RETURN(rgba , suc , true);            
+        } else if(ustr.GetLength() == 10) {
+            rgba.a = (Upp::byte)strtol(ustr.Mid(2, 2), &h, 16);
+            rgba.r = (Upp::byte)strtol(ustr.Mid(4, 2), &h, 16);
+            rgba.g = (Upp::byte)strtol(ustr.Mid(6, 2), &h, 16);
+            rgba.b = (Upp::byte)strtol(ustr.Mid(8, 2), &h, 16);
+            UPP_BOOL_RETURN(rgba , suc , true);
+        }
+        UPP_BOOL_RETURN(rgba , suc , false);
+    }
     Vector<String> v = Upp::Split(str , ",");
     int count = v.GetCount();
-    if(count != 4 && count != 3)
+    if(count != 4 && count != 3) {
         UPP_BOOL_RETURN(rgba , suc , false);
-    rgba.r = (Upp::byte)atoi(v[0]);
-    rgba.g = (Upp::byte)atoi(v[1]);
-    rgba.b = (Upp::byte)atoi(v[2]);
-    if(count == 4)
-        rgba.a = (Upp::byte)atoi(v[3]);
+    }
+    rgba.r = (Upp::byte)atoi(TrimBoth(v[0]));
+    rgba.g = (Upp::byte)atoi(TrimBoth(v[1]));
+    rgba.b = (Upp::byte)atoi(TrimBoth(v[2]));
+    if(count == 4) {
+        rgba.a = (Upp::byte)atoi(TrimBoth(v[3]));
+    }
     UPP_BOOL_RETURN(rgba , suc , true);
 }
 
 Rect UppUIHelper::ParseRect(const char *str , bool *suc) {
     Rect rc(0 , 0 , 1 , 1);
-    if(str == NULL)
+    if(str == NULL) {
         UPP_BOOL_RETURN(rc , suc , false);
+    }
     Vector<String> v = Upp::Split(str , ",");
-    if(v.GetCount() != 4)
+    if(v.GetCount() != 4) {
         UPP_BOOL_RETURN(rc , suc , false);
-    rc.Set(atoi(v[0]) , atoi(v[1]) , atoi(v[2]) , atoi(v[3]));
+    }
+    rc.Set(atoi(TrimBoth(v[0])) , atoi(TrimBoth(v[1])) , atoi(TrimBoth(v[2])) , atoi(TrimBoth(v[3])));
     UPP_BOOL_RETURN(rc , suc , true);
 }
 
@@ -52,13 +82,15 @@ Rect UppUIHelper::ParseSizeRect(const char *str , bool *suc) {
 
 Upp::Size UppUIHelper::ParseSize(const char *str , bool *suc) {
     Size sz(1 , 1);
-    if(str == NULL)
+    if(str == NULL) {
         UPP_BOOL_RETURN(sz , suc , false);
+    }
     Vector<String> v = Upp::Split(str , ",");
-    if(v.GetCount() != 2)
+    if(v.GetCount() != 2) {
         UPP_BOOL_RETURN(sz , suc , false);
-    sz.cx = atoi(v[0]) ;
-    sz.cy = atoi(v[1]) ;
+    }
+    sz.cx = atoi(TrimBoth(v[0])) ;
+    sz.cy = atoi(TrimBoth(v[1])) ;
     if(sz.cx < 1) sz.cx = 1;
     if(sz.cy < 1) sz.cy = 1;
     UPP_BOOL_RETURN(sz , suc , true);
@@ -66,22 +98,26 @@ Upp::Size UppUIHelper::ParseSize(const char *str , bool *suc) {
 
 Upp::Point UppUIHelper::ParsePoint(const char *str , bool *suc) {
     Point pt(0 , 0);
-    if(str == NULL)
+    if(str == NULL) {
         UPP_BOOL_RETURN(pt , suc , false);
+    }
     Vector<String> v = Upp::Split(str , ",");
-    if(v.GetCount() != 2)
+    if(v.GetCount() != 2) {
         UPP_BOOL_RETURN(pt , suc , false);
-    pt.x = atoi(v[0]);
-    pt.y = atoi(v[1]);
+    }
+    pt.x = atoi(TrimBoth(v[0]));
+    pt.y = atoi(TrimBoth(v[1]));
     UPP_BOOL_RETURN(pt , suc , true);
 }
 
 bool UppUIHelper::ParseBool(const char *str , bool *suc) {
     bool b = false;
-    if(str == NULL)
+    if(str == NULL) {
         UPP_BOOL_RETURN(b , suc , false);
-    if(stricmp(str , "true") == 0 || strcmp(str , "1") == 0)
+    }
+    if(stricmp(str , "true") == 0 || strcmp(str , "1") == 0) {
         b = true;
+    }
     UPP_BOOL_RETURN(b , suc , false);
 }
 
@@ -89,45 +125,84 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
     if(ret == NULL) return FALSE;
     bool suc = false;
     XmlNode xml = ParseXML(xmlstr);
-    if(xml.IsEmpty())
+    if(xml.IsEmpty()) {
+        assert(false);     
         return FALSE;
-    if(xml.GetCount() != 1)
+    }
+    if(xml.GetCount() != 1) {
+        assert(false);
         return FALSE;
+    }
     const XmlNode &skinnode = xml.At(0);
-    if(!skinnode.IsTag("skin"))
+    if(!skinnode.IsTag("skin")) {
+        assert(false);
         return FALSE;
+    }
+    ret->resname_ = skinnode.Attr("name");
+    if(ret->resname_.IsEmpty()) {
+        assert(false);
+        return FALSE;
+    }
     VectorMap<String , Upp::Color> colors;
     VectorMap<String , Upp::Image> images;
     VectorMap<String , Upp::Font > fonts;
+    Upp::VectorMap< Upp::String , Upp::Image > small_icons;
+    Upp::VectorMap< Upp::String , Upp::Image > large_icons;
+    Upp::VectorMap< Upp::String , Upp::Image > cursors;
     for(int i = 0 ; i < skinnode.GetCount() ; i++) {
         const XmlNode &resnode = skinnode.Node(i);
         if(resnode.IsTag("color")) {
+            bool suc = false;
             String id = resnode.Attr("id");
-            if(id.IsEmpty()) return FALSE;
-            Color clr(resnode.AttrInt("value") , 0);
-            colors.Add(id , clr);
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("value") , &suc);
+            if(suc) {
+                colors.Add(id , Color(rgba));
+            }
         }else if(resnode.IsTag("font")) {
             String id = resnode.Attr("id");
-            if(id.IsEmpty()) return FALSE;
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
             Font fdata;
-            String fontattr = resnode.Attr("facename");
-            if(fontattr.IsEmpty()) fontattr = "STDFONT";
-            fdata.FaceName(fontattr) ;
-            fdata.Height(resnode.AttrInt("height" , 0));
+            String fontface = resnode.Attr("facename");
+            if(fontface.IsEmpty()) fontface = "STDFONT";
+            fdata.FaceName(fontface) ;
+            int font_size = abs(resnode.AttrInt("pointsize" , 9));
+            int nHeight = -MulDiv(font_size, GetDeviceCaps(Win32_IC(), LOGPIXELSY), 72);
+            fdata.Height(nHeight);
             fdata.Width(resnode.AttrInt("width" , 0));
             fdata.Bold(UppUIHelper::ParseBool(resnode.Attr("bold")));
             fdata.Italic(UppUIHelper::ParseBool(resnode.Attr("italic")));
             fdata.Underline(UppUIHelper::ParseBool(resnode.Attr("underline")));
+            if(fontface == "STDFONT") {
+                SetStdFont(fdata);
+            }
             fonts.Add(id , fdata);
         }else if(resnode.IsTag("image")) {
             String id = resnode.Attr("id");
-            if(id.IsEmpty()) return FALSE;
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
             if(!resnode.Attr("file").IsEmpty()) {
-                String file = Upp::AppendFileName(respath , resnode.Attr("file"));
+				String filename = resnode.Attr("file");
+				filename.Replace(DIR_UNIX_SEPS, DIR_SEPS);
+                String file = Upp::AppendFileName(respath , filename);
                 FileIn in;
-                if(!in.Open(file)) return FALSE;
+                if(!in.Open(file)) {
+                    assert(false);
+                    return FALSE;
+                }
                 Image img = StreamRaster::LoadAny(in);
-                if(img.IsEmpty()) return FALSE;
+                if(img.IsEmpty()) {
+                    assert(false);
+                    return FALSE;
+                }
                 RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("transcolor") , &suc);
                 if(suc) {
                     img = UppUIHelper::GetTransColorImage(img , rgba);
@@ -136,24 +211,47 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
             }else if(!resnode.Attr("mono").IsEmpty()) {
                 bool suc = false;
                 RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("mono") , &suc);
-                if(!suc) return false;
+                if(!suc) {
+                    assert(false);
+                    return FALSE;
+                }
                 Size sz = UppUIHelper::ParseSize(resnode.Attr("size") , &suc);
-                if(!suc) return false;
+                if(!suc) {
+                    assert(false);
+                    return FALSE;
+                }
                 images.Add(id , UppUIHelper::CreateMonoImage(rgba , sz));
             }
         }else if(resnode.IsTag("images")) {
-            String file = Upp::AppendFileName(respath , resnode.Attr("file"));
+			String filename = resnode.Attr("file");
+			filename.Replace(DIR_UNIX_SEPS, DIR_SEPS);
+            String file = Upp::AppendFileName(respath , filename);
             FileIn in;
-            if(!in.Open(file)) return FALSE;
+            if(!in.Open(file)) {
+                assert(false);
+                return FALSE;
+            }
             Image img = StreamRaster::LoadAny(in);
-            if(img.IsEmpty()) return FALSE;
+            if(img.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
             for(int j = 0 ; j < resnode.GetCount() ; j++) {
                 const XmlNode &partimg = resnode.Node(j);
-                if(!partimg.IsTag("partimage")) return FALSE;
+                if(!partimg.IsTag("partimage")) {
+                    assert(false);
+                    return FALSE;
+                }
                 String id = partimg.Attr("id");
-                if(id.IsEmpty()) return FALSE;
+                if(id.IsEmpty()) {
+                    assert(false);
+                    return FALSE;
+                }
                 Rect rc = UppUIHelper::ParseSizeRect(partimg.Attr("sizerect") , &suc);
-                if(!suc) return FALSE;
+                if(!suc) {
+                    assert(false);
+                    return FALSE;
+                }
                 Image retimg = Upp::Crop(img , rc);
                 RGBA rgba = UppUIHelper::ParseColor(partimg.Attr("transcolor") , &suc);
                 if(suc) {
@@ -161,13 +259,394 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
                 }
                 images.Add(id , retimg);
             }
+        }else if(resnode.IsTag("icon")) {
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            if(!resnode.Attr("file").IsEmpty()) {
+				String filename = resnode.Attr("file");
+				filename.Replace(DIR_UNIX_SEPS, DIR_SEPS);
+                String file = Upp::AppendFileName(respath , filename);
+                file = Upp::ToSystemCharset(file);
+                HICON small_icon = (HICON)::LoadImageA(NULL, ~file, IMAGE_ICON, 
+                    GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CXSMICON), 
+                    LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE);
+                HICON large_icon = (HICON)::LoadImageA(NULL, ~file, IMAGE_ICON, 
+                    GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CXICON),
+                    LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE);
+                if(small_icon == NULL || large_icon == NULL) {
+                    assert(false);
+                    return FALSE;
+                } else {
+                    small_icons.Add(id, Upp::sWin32Icon(small_icon, false));
+                    large_icons.Add(id, Upp::sWin32Icon(large_icon, false));
+                }
+            }
+        }else if(resnode.IsTag("cursor")) {
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            if(!resnode.Attr("file").IsEmpty()) {
+				String filename = resnode.Attr("file");
+				filename.Replace(DIR_UNIX_SEPS, DIR_SEPS);
+                String file = Upp::AppendFileName(respath , filename);
+                file = Upp::ToSystemCharset(file);
+                HCURSOR hc = (HCURSOR)::LoadImageA(NULL, ~file, IMAGE_CURSOR, 
+                    GetSystemMetrics(SM_CXCURSOR), GetSystemMetrics(SM_CXCURSOR),
+                    LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE);
+                if(hc == NULL) {
+                    assert(false);
+                    return FALSE;                
+                } else {
+                    cursors.Add(id, Upp::sWin32Icon(hc, true));
+                }
+            }
         }
     }
     ret->colors_ = colors;
     ret->images_ = images;
+    ret->fonts_ = fonts;
+    ret->small_icons_ = small_icons;
+    ret->large_icons_ = large_icons;
+    ret->cursors_ = cursors;
     return TRUE;
 }
 
+BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , UppResData *ret) {
+    String xmlstr;
+    try {
+        const char *res = "res.xml";
+        marisa::Agent agent;
+        agent.set_query(res, strlen(res) + 1);
+        if(!trie.predictive_search(agent)) {
+            assert(false);
+            return FALSE;
+        }
+        xmlstr.Insert(0, (agent.key().ptr() + strlen(res) + 1), agent.key().length() - strlen(res) - 1);
+        AdjustMarisaInnerFileData(xmlstr);
+
+        bool hasBOM = false;
+        const unsigned char bom[] = {0xef, 0xbb, 0xbf, 0xbf, 0xbb, 0xef};
+        if(xmlstr.GetLength() >= 3) {
+            if(memcmp(~xmlstr, bom, 3) == 0) {
+                hasBOM = true;
+            } else if(memcmp(~xmlstr, bom + 3, 3) == 0) {
+                hasBOM = true;
+            }
+        }
+        if(hasBOM) {
+            xmlstr.Remove(0, 3);
+        }
+        xmlstr.Cat(1, '\0');
+    } catch(marisa::Exception& e) {
+        assert(false);
+        e;
+        return FALSE;
+    } catch(...) {
+        assert(false);
+        return FALSE;
+    }
+    bool suc = false;
+    XmlNode xml = ParseXML(xmlstr);
+    if(xml.IsEmpty()) {
+        assert(false);
+        return FALSE;
+    }
+    if(xml.GetCount() != 1) {
+        assert(false);
+        return FALSE;
+    }
+    const XmlNode &skinnode = xml.At(0);
+    if(!skinnode.IsTag("skin")) {
+        assert(false);
+        return FALSE;
+    }
+    ret->resname_ = skinnode.Attr("name");
+    if(ret->resname_.IsEmpty()) {
+        assert(false);    
+        return FALSE;
+    }
+    VectorMap<String , Upp::Color> colors;
+    VectorMap<String , Upp::Image> images;
+    VectorMap<String , Upp::Font > fonts;
+    Upp::VectorMap< Upp::String , Upp::Image > small_icons;
+    Upp::VectorMap< Upp::String , Upp::Image > large_icons;
+    Upp::VectorMap< Upp::String , Upp::Image > cursors;
+    for(int i = 0 ; i < skinnode.GetCount() ; i++) {
+        const XmlNode &resnode = skinnode.Node(i);
+        if(resnode.IsTag("color")) {
+            bool suc = false;
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("value") , &suc);
+            if(suc) {
+                colors.Add(id , Color(rgba));
+            }
+        }else if(resnode.IsTag("font")) {
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            Font fdata;
+            String fontface = resnode.Attr("facename");
+            if(fontface.IsEmpty()) fontface = "STDFONT";
+            fdata.FaceName(fontface) ;
+            int font_size = abs(resnode.AttrInt("pointsize" , 9));
+            int nHeight = -MulDiv(font_size, GetDeviceCaps(Win32_IC(), LOGPIXELSY), 72);
+            fdata.Height(nHeight);
+            fdata.Width(resnode.AttrInt("width" , 0));
+            fdata.Bold(UppUIHelper::ParseBool(resnode.Attr("bold")));
+            fdata.Italic(UppUIHelper::ParseBool(resnode.Attr("italic")));
+            fdata.Underline(UppUIHelper::ParseBool(resnode.Attr("underline")));
+            if(fontface == "STDFONT") {
+                SetStdFont(fdata);
+            }
+            fonts.Add(id , fdata);
+        }else if(resnode.IsTag("image")) {
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            if(!resnode.Attr("file").IsEmpty()) {
+                String file = resnode.Attr("file");
+                Image img;
+                if(!ExtraImageFromTrie(trie, file, img)) {
+                    assert(false);
+                    return FALSE;
+                }
+                RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("transcolor") , &suc);
+                if(suc) {
+                    img = UppUIHelper::GetTransColorImage(img , rgba);
+                }
+                images.Add(id , img);
+            }else if(!resnode.Attr("mono").IsEmpty()) {
+                bool suc = false;
+                RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("mono") , &suc);
+                if(!suc) {
+                    assert(false);
+                    return FALSE;
+                }
+                Size sz = UppUIHelper::ParseSize(resnode.Attr("size") , &suc);
+                if(!suc) {
+                    assert(false);
+                    return false;
+                }
+                images.Add(id , UppUIHelper::CreateMonoImage(rgba , sz));
+            }
+        }else if(resnode.IsTag("images")) {
+            String file = resnode.Attr("file");
+            Image img;
+            if(!ExtraImageFromTrie(trie, file, img)) {
+                assert(false);
+                return FALSE;
+            }
+            for(int j = 0 ; j < resnode.GetCount() ; j++) {
+                const XmlNode &partimg = resnode.Node(j);
+                if(!partimg.IsTag("partimage")) {
+                    assert(false);
+                    return FALSE;
+                }
+                String id = partimg.Attr("id");
+                if(id.IsEmpty()) {
+                    assert(false);
+                    return FALSE;
+                }
+                Rect rc = UppUIHelper::ParseSizeRect(partimg.Attr("sizerect") , &suc);
+                if(!suc) {
+                    assert(false);
+                    return FALSE;
+                }
+                Image retimg = Upp::Crop(img , rc);
+                RGBA rgba = UppUIHelper::ParseColor(partimg.Attr("transcolor") , &suc);
+                if(suc) {
+                    retimg = UppUIHelper::GetTransColorImage(retimg , rgba);
+                }
+                images.Add(id , retimg);
+            }
+        }else if(resnode.IsTag("icon")) {
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);
+                return FALSE;
+            }
+            if(!resnode.Attr("file").IsEmpty()) {
+                String file = resnode.Attr("file");
+                String filedata;
+                if(!UppUIHelper::ExtraDataFromTrie(trie, file, filedata)) {
+                    assert(false);
+                    return FALSE;
+                }
+                file = GetTempFileName("icon_");
+                if(true) {
+                    FileOut out(~file);
+                    out.Put(filedata);
+                }
+                filedata = file;
+                file = Upp::ToSystemCharset(file);
+                HICON small_icon = (HICON)::LoadImageA(NULL, ~file, IMAGE_ICON, 
+                    GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CXSMICON), 
+                    LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE);
+                HICON large_icon = (HICON)::LoadImageA(NULL, ~file, IMAGE_ICON, 
+                    GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CXICON),
+                    LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE);
+                FileDelete(~filedata);
+                if(small_icon != NULL) {
+                    small_icons.Add(id, Upp::sWin32Icon(small_icon, false));
+                } else {
+                    assert(false);
+                    return FALSE;
+                }
+                if(large_icon != NULL) {
+                    large_icons.Add(id, Upp::sWin32Icon(large_icon, false));
+                } else {
+                    assert(false);
+                    return FALSE;
+                }
+            }
+        }else if(resnode.IsTag("cursor")) {
+            String id = resnode.Attr("id");
+            if(id.IsEmpty()) {
+                assert(false);             
+                return FALSE;
+            }
+            if(!resnode.Attr("file").IsEmpty()) {
+                String file = resnode.Attr("file");
+                String filedata;
+                if(!UppUIHelper::ExtraDataFromTrie(trie, file, filedata)) {
+                    assert(false);
+                    return FALSE;
+                }
+                file = GetTempFileName("cursor_");
+                if(true) {
+                    FileOut out(~file);
+                    out.Put(filedata);
+                }
+                filedata = file;
+                file = Upp::ToSystemCharset(file);
+                HCURSOR hc = (HCURSOR)::LoadImageA(NULL, ~file, IMAGE_CURSOR, 
+                    GetSystemMetrics(SM_CXCURSOR), GetSystemMetrics(SM_CXCURSOR),
+                    LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE);
+                FileDelete(~filedata);
+                if(hc != NULL) {
+                    cursors.Add(id, Upp::sWin32Icon(hc, true));
+                } else {
+                    assert(false);
+                    return FALSE;
+                }
+            }
+        }
+    }
+    ret->colors_ = colors;
+    ret->images_ = images;
+    ret->fonts_ = fonts;
+    ret->small_icons_ = small_icons;
+    ret->large_icons_ = large_icons;
+    ret->cursors_ = cursors;
+    return TRUE;
+}
+
+BOOL UppUIHelper::ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& filedata) {
+    filedata.Clear();
+    size_t keysize = key.GetLength() + 1;
+    marisa::Agent agent;
+    agent.set_query(~key, keysize);
+    if(!trie.predictive_search(agent)) {
+        assert(false);
+        return FALSE;
+    }
+    filedata.Cat(agent.key().ptr() + keysize, agent.key().length() - keysize);
+    AdjustMarisaInnerFileData(filedata);
+    return TRUE;
+}
+
+BOOL UppUIHelper::ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::Image& image) {
+    Upp::String filedata;
+    if(!ExtraDataFromTrie(trie, key, filedata)) {
+        return FALSE;
+    }
+    StringStream in(filedata);
+    image = StreamRaster::LoadAny(in);
+    if(image.IsEmpty()) {
+        assert(false);            
+        return FALSE;
+    }
+    return TRUE;
+}
+
+
+BOOL UppUIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
+    Size sz(0 , 0);
+    Point pt(0 , 0);
+    if(attrId == "layid") {
+        ctrl->LayoutId(attrVal);
+    } else if(attrId == "layidc") {
+        ctrl->Tip(attrVal);
+    } else if(attrId == "tip") {
+        ctrl->Tip(attrVal);
+    } else if(attrId == "tabstop") {
+        ctrl->WantFocus(UppUIHelper::ParseBool(attrVal));
+    }else if(attrId == "HSizePos") {
+        sz = UppUIHelper::ParseSize(attrVal);
+        ctrl->HSizePos(sz.cx , sz.cy);
+    }else if(attrId == "HSizePosZ") {
+        sz = UppUIHelper::ParseSize(attrVal);
+        ctrl->HSizePosZ(sz.cx , sz.cy);
+    }else if(attrId == "VSizePos") {
+        sz = UppUIHelper::ParseSize(attrVal);
+        ctrl->VSizePos(sz.cx , sz.cy);
+    }else if(attrId == "VSizePosZ") {
+        sz = UppUIHelper::ParseSize(attrVal);
+        ctrl->VSizePosZ(sz.cx , sz.cy);
+    }else if(attrId == "HCenterPos") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->HCenterPos(pt.x , pt.y);
+    }else if(attrId == "HCenterPosZ") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->HCenterPosZ(pt.x , pt.y);
+    }else if(attrId == "VCenterPos") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->VCenterPos(pt.x , pt.y);
+    }else if(attrId == "VCenterPosZ") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->VCenterPosZ(pt.x , pt.y);
+    }else if(attrId == "LeftPos") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->LeftPos(pt.x , pt.y);
+    }else if(attrId == "LeftPosZ") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->LeftPosZ(pt.x , pt.y);
+    }else if(attrId == "RightPos") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->RightPos(pt.x , pt.y);
+    }else if(attrId == "RightPosZ") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->RightPosZ(pt.x , pt.y);
+    }else if(attrId == "TopPos") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->TopPos(pt.x , pt.y);
+    }else if(attrId == "TopPosZ") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->TopPosZ(pt.x , pt.y);
+    }else if(attrId == "BottomPos") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->BottomPos(pt.x , pt.y);
+    }else if(attrId == "BottomPosZ") {
+        pt = UppUIHelper::ParsePoint(attrVal);
+        ctrl->BottomPosZ(pt.x , pt.y);
+    } else {
+        return FALSE;
+    }
+    return TRUE;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Upp::Image UppUIHelper::CreateMonoImage(Upp::RGBA rgba , Upp::Size sz) {
@@ -372,3 +851,5 @@ HRGN UppUIHelper::CalcClipRegion(const RECT &rc , const std::vector<ClipRegionDa
     OffsetRgn(hRgn , rc.left , rc.top);
     return hRgn;
 }
+
+END_UPPEX_NAMESPACE

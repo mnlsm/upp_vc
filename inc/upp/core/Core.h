@@ -54,7 +54,8 @@
 #if defined(COMPILER_MSC) && defined(CPU_X86)
 #pragma warning(disable: 4035)
 
-
+#define DIR_UNIX_SEP '/'
+#define DIR_UNIX_SEPS "/"
 #define DIR_SEP  '\\'
 #define DIR_SEPS "\\"
 #define PLATFORM_PATH_HAS_CASE 0

@@ -14,7 +14,7 @@ void GetStdFontSys(String& name, int& height) {
     height = abs((int)ncm.lfMenuFont.lfHeight);
 }
 
-#define FONTCACHE 96
+#define FONTCACHE 256
 
 struct HFontEntry {
     Font    font;
@@ -33,9 +33,9 @@ HFONT GetWin32Font(Font fnt, int angle) {
     be = cache[0];
     for(int i = 0; i < FONTCACHE; i++) {
         HFontEntry e = cache[i];
-        if(i)
+        if(i) {
             cache[i] = be;
-        if(e.font == fnt && e.angle == angle) {
+        } if(e.font == fnt && e.angle == angle) {
             if(i)
                 cache[0] = e;
             return e.hfont;

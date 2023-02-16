@@ -271,6 +271,7 @@ dword FileStream::Read(int64 at, void *ptr, dword size) {
     dword n;
     SetPos(at);
     if(IsError()) return 0;
+    ::SetLastError(0);
     if(!ReadFile(handle, ptr, size, (DWORD *)&n, NULL)) {
         SetLastError();
         return 0;

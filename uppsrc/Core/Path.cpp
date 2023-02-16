@@ -153,8 +153,6 @@ bool   PathIsEqual(const char *p1, const char *p2) {
     return ToLower(NormalizePath(p1)) == ToLower(NormalizePath(p2));
 }
 
-
-
 String GetCurrentDirectoryA() {
     if(IsWinNT()) {
         wchar h[MAX_PATH];

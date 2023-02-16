@@ -405,7 +405,8 @@ Button::Button() {
     monoimg = false;
 }
 
-Button::~Button() {}
+Button::~Button() {
+}
 
 CH_STYLE(SpinButtons, Style, StyleDefault) {
     inc = dec = Button::StyleNormal();

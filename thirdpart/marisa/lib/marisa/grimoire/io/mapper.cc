@@ -154,6 +154,7 @@ void Mapper::open_(const char *filename) {
 #endif  // (defined _WIN32) || (defined _WIN64)
 
 void Mapper::open_(const void *ptr, std::size_t size) {
+  origin_ = (void*)ptr;
   ptr_ = ptr;
   avail_ = size;
 }

@@ -6,12 +6,46 @@
 #include <ctrlcore/SystemDraw.h>
 #include <ctrllib/CtrlLib.h>
 
+#include <lib/marisa/sec-trie.h>
+#include <lib/marisa/grimoire/io/mapper.h>
+#include <lib/marisa/grimoire/io/writer.h>
+
+#ifdef flagNONAMESPACE
+#define NAMESPACE_UPPEX
+#define END_UPPEX_NAMESPACE
+#define UPPEX
+#else
+#define NAMESPACE_UPPEX     namespace Uppex {
+#define END_UPPEX_NAMESPACE };
+#define UPPEX               Uppex
+#endif
+
+NAMESPACE_UPPEX
 
 
 typedef struct tagUppResData {
+    Upp::String resname_;
+
     Upp::VectorMap< Upp::String , Upp::Color > colors_;
     Upp::VectorMap< Upp::String , Upp::Image > images_;
     Upp::VectorMap< Upp::String , Upp::Font > fonts_;
+
+    Upp::VectorMap< Upp::String , Upp::Image > small_icons_;
+    Upp::VectorMap< Upp::String , Upp::Image > large_icons_;
+    Upp::VectorMap< Upp::String , Upp::Image > cursors_;
+
+    void Swap(tagUppResData& other) {
+        if(this != &other) {
+            Upp::Swap(resname_, other.resname_);
+            Upp::Swap(colors_, other.colors_);
+            Upp::Swap(images_, other.images_);
+            Upp::Swap(fonts_, other.fonts_);
+            Upp::Swap(small_icons_, other.small_icons_);
+            Upp::Swap(large_icons_, other.large_icons_);
+            Upp::Swap(cursors_, other.cursors_);
+        }
+    }
+
 } UppResData , *LPUppResData;
 
 typedef struct tagClipRegionData {
@@ -46,7 +80,13 @@ public:
 
 public:
     static BOOL LoadResFromXml(const char *xmlstr , const char *respath , UppResData *ret);
+    static BOOL LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , UppResData *ret);
+    static BOOL ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& filedata);
+    static BOOL ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::Image& image);
 
+public:
+    static BOOL SetCtrlParam(Upp::Ctrl* ctrl, Upp::String attrId, Upp::String attrVal);
+    
 
 
 public:
@@ -62,10 +102,14 @@ public:
     static HRGN CalcClipRegion(const RECT &rc , const std::vector<ClipRegionData> *vClips);
 
 
-
+public:
+    static void AdjustMarisaInnerFileData(Upp::String& filedata);
 
 
 
 };
+
+
+END_UPPEX_NAMESPACE
 
 #endif

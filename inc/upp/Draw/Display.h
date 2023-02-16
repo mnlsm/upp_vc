@@ -204,3 +204,7 @@ public:
     PaintRect(const Display& display);
     PaintRect(const Display& display, const Value& val);
 };
+
+#ifdef PLATFORM_WIN32
+HDC Win32_IC();
+#endif

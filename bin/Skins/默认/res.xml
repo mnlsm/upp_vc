@@ -1,38 +1,39 @@
-﻿<skin name='xxxx'>
+﻿<skin name='default'>
   <color id='color_1' value='0xFFFFFFFF'/>
-  <font id='default_font' facename="宋体" height='9' bold='false' italic='false' underline='false' width='0'/>
-  <image id='sys_sizebox' mono='0,0,0,0' size='1,1'/>
-  <images file='res\img\sysbar_close.png'>
+  <font id='default_font' facename="宋体" pointsize='12' bold='false' italic='false' underline='false' width='0'/>
+  <image id='sys_sizebox' mono='0x00000000' size='1,1'/>
+  <icon id='main' file='res/icon/main.ico'/>
+  <images file='res/image/sysbar_close.png'>
     <partimage id='sys_close_normal' sizerect='0,0,39,25'/>
     <partimage id='sys_close_hover' sizerect='39,0,39,25'/>
     <partimage id='sys_close_down' sizerect='78,0,39,25'/>
     <partimage id='sys_close_disable' sizerect='0,0,39,25'/>
   </images>
-  <images file='res\img\sysbar_min.png'>
+  <images file='res/image/sysbar_min.png'>
     <partimage id='sys_min_normal' sizerect='0,0,31,25'/>
     <partimage id='sys_min_hover' sizerect='31,0,31,25'/>
     <partimage id='sys_min_down' sizerect='62,0,31,25'/>
     <partimage id='sys_min_disable' sizerect='0,0,31,25'/>
   </images>
-  <images file='res\img\sysbar_max.png'>
+  <images file='res/image/sysbar_max.png'>
     <partimage id='sys_max_normal' sizerect='0,0,31,25'/>
     <partimage id='sys_max_hover' sizerect='31,0,31,25'/>
     <partimage id='sys_max_down' sizerect='62,0,31,25'/>
     <partimage id='sys_max_disable' sizerect='0,0,31,25'/>
   </images>
-  <images file='res\img\sysbar_max.png'>
+  <images file='res/image/sysbar_max.png'>
     <partimage id='sys_restore_normal' sizerect='0,0,31,25'/>
     <partimage id='sys_restore_hover' sizerect='31,0,31,25'/>
     <partimage id='sys_restore_down' sizerect='62,0,31,25'/>
     <partimage id='sys_restore_disable' sizerect='0,0,31,25'/>
   </images>
-  <images file='res\img\common_button.png'>
+  <images file='res/image/common_button.png'>
     <partimage id='common_button_normal' sizerect='0,0,60,24'/>
     <partimage id='common_button_hover' sizerect='60,0,60,24'/>
     <partimage id='common_button_down' sizerect='120,0,60,24'/>
     <partimage id='common_button_disable' sizerect='0,0,60,24'/>
   </images>
-  <images file='res\img\login_background.png'>
+  <images file='res/image/login_background.png'>
     <partimage id='main_wnd_topleft' sizerect='0,0,110,283'/>
     <partimage id='main_wnd_topmiddle' sizerect='112,0,48,283'/>
     <partimage id='main_wnd_topright' sizerect='162,0,106,283'/>
@@ -43,7 +44,7 @@
     <partimage id='main_wnd_bottommiddle' sizerect='112,295,48,54'/>
     <partimage id='main_wnd_bottomright' sizerect='162,295,106,54'/>
   </images>
-  <images file='res\img\wnd_background_grid.png'>
+  <images file='res/image/wnd_background_grid.png'>
     <partimage id='wnd_topleft' sizerect='0,0,110,283'/>
     <partimage id='wnd_topmiddle' sizerect='112,0,48,283'/>
     <partimage id='wnd_topright' sizerect='162,0,106,283'/>
@@ -55,16 +56,16 @@
     <partimage id='wnd_bottomright' sizerect='162,295,106,54'/>
   </images>
 
-  <images file='res\img\wnd_background_color_grid.png'>
-    <partimage id='wnd_color_topleft' sizerect='0,0,106,279' transcolor='255,0,255'/>
+  <images file='res/image/wnd_background_color_grid.png'>
+    <partimage id='wnd_color_topleft' sizerect='0,0,106,279' transcolor='#FFFF00FF'/>
     <partimage id='wnd_color_topmiddle' sizerect='108,0,48,279'/>
-    <partimage id='wnd_color_topright' sizerect='157,0,100,279' transcolor='255,0,255'/>
+    <partimage id='wnd_color_topright' sizerect='157,0,100,279' transcolor='#FFFF00FF'/>
     <partimage id='wnd_color_centerleft' sizerect='0,280,106,9'/>
     <partimage id='wnd_color_centermiddle' sizerect='108,280,48,9'/>
     <partimage id='wnd_color_centerright' sizerect='157,280,100,9'/>
-    <partimage id='wnd_color_bottomleft' sizerect='0,290,106,45' transcolor='255,0,255'/>
+    <partimage id='wnd_color_bottomleft' sizerect='0,290,106,45' transcolor='#FFFF00FF'/>
     <partimage id='wnd_color_bottommiddle' sizerect='108,290,48,45'/>
-    <partimage id='wnd_color_bottomright' sizerect='157,290,100,45'  transcolor='255,0,255'/>
+    <partimage id='wnd_color_bottomright' sizerect='157,290,100,45'  transcolor='#FFFF00FF'/>
   </images>
 
 </skin>

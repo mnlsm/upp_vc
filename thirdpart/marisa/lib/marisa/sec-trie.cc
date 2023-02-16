@@ -158,7 +158,9 @@ void SecTrie::clear() {
 
 void SecTrie::swap(SecTrie &rhs)  {
   trie_.swap(rhs.trie_);
+  marisa_uint64 crc64 = crc64_;
   crc64_ = rhs.crc64_;
+  rhs.crc64_ = crc64;
 }
 
 
