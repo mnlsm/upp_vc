@@ -1,8 +1,9 @@
-#ifndef UPP_UppParentCtrlEx_H__
-#define UPP_UppParentCtrlEx_H__
+#ifndef UPPEX_UPPPARENTCTRLEX_H__
+#define UPPEX_UPPPARENTCTRLEX_H__
+#pragma once
 
 
-#include "../../UppUIHelper.h"
+#include "../../UppSkinMgr.h"
 
 NAMESPACE_UPPEX
 class UppParentCtrlEx

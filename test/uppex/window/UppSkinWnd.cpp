@@ -159,6 +159,9 @@ void CUppSkinWnd::OnBuildFinished() {
 
     EditField* inputname = dynamic_cast<EditField*>(GetCtrlByLayoutId("inputname"));
     inputname->NoBackground(true);
+
+    ImageCtrl* image1 = dynamic_cast<ImageCtrl*>(GetCtrlByLayoutId("image1"));
+    image1->SetImage(theSkinMgr.ExtractImage("res/image/wechatclean_cache.png"));
 }
 
 void CUppSkinWnd::OnWindowClose() {

@@ -314,6 +314,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="static"
+					>
+					<File
+						RelativePath=".\uppex\controls\static\UppStaticEx.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\uppex\controls\static\UppStaticEx.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="window"
