@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UppSkinWnd.h"
 #include "../UppSkinMgr.h"
+#include "../controls/container/UppParentCtrlEx.h"
 
 using namespace Upp;
 #define LLOG(x)
@@ -37,11 +38,11 @@ void CUppSkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
         vCacheCtrls_.Add(layidc, Upp::Ptr<Upp::Ctrl>(ctrl));        
     }
     subctrls_.push_back(std::tr1::shared_ptr<Upp::Ctrl>(ctrl));
+    String layid = ctrl->GetLayoutId();
     if(tag == "Button") {
         Upp::Button* button = dynamic_cast<Upp::Button*>(ctrl);
-        String attrVal = node.Attr("label");
-        if(!attrVal.IsEmpty()) button->SetLabel(attrVal);
-        String layid = ctrl->GetLayoutId();
+        //String attrVal = node.Attr("label");
+        //if(!attrVal.IsEmpty()) button->SetLabel(attrVal);
         if(layid == "sys_closebtn") {
             String skin = node.Attr("skin");
             UpdateSysButtonStyle(button, skin);
@@ -73,6 +74,10 @@ void CUppSkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
             sizeboxbtn_ = button;
             sizeboxbtn_->Show(true);
             sizeboxbtn_->Enable(false);
+        }
+    } else if(tag == "ParentCtrlEx") {
+        if(layid == "sys_titlebar") {
+            titlebar_ = dynamic_cast<UppParentCtrlEx*>(ctrl);
         }
     }
 }

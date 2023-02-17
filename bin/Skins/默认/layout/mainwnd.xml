@@ -25,7 +25,9 @@
   <EditField layidc='inputname' HCenterPos='100,0' TopPos='100,20' tabstop='true'/>
   <WithDropChoice layidc='userlist' HCenterPos='100,0' TopPos='140,20' tabstop='true'/>
   <Button layidc='testbtn' label='测试' HSizePos='30,30' TopPos='170,24' tabstop='true'/>
-  <ImageCtrl layidc='image1' HCenterPos='88,0' TopPos='200,88' tabstop='true'/>
+  <ImageCtrlEx layidc='image1' src='res/image/search.png' HCenterPos='96,0' TopPos='200,32' tabstop='false'/>
+  <ImageCtrlEx layidc='image2' src='res/image/backup_sms.png' HCenterPos='88,0' TopPos='240,88' tabstop='false'/>
+  
 </ParentCtrlEx>
 
 </SkinWnd>

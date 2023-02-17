@@ -5,13 +5,14 @@
 
 NAMESPACE_UPPEX
 class UppStaticEx
-        : public Upp::ParentCtrl {
+        : public Upp::Ctrl {
 public:
     UppStaticEx();
     virtual ~UppStaticEx();
 
 public:
-    //virtual Upp::Image CursorImage(Upp::Point p, Upp::dword keyflags);
+
+
 };
 
 END_UPPEX_NAMESPACE

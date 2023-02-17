@@ -4,6 +4,8 @@
 #include <assert.h>
 
 #include "controls/container/UppParentCtrlEx.h"
+#include "controls/static/UppImageCtrlEx.h"
+
 
 namespace {
 class IUppCtrlCreator 
@@ -51,7 +53,7 @@ void InitializeUppCtrlCreators() {
     GetCache().Add("Button", new (std::nothrow) UppCtrlCreator<Upp::Button>());
     GetCache().Add("EditField", new (std::nothrow) UppCtrlCreator<Upp::EditField>());
     GetCache().Add("WithDropChoice", new (std::nothrow) UppCtrlCreator<Upp::WithDropChoice<EditString>>());
-    GetCache().Add("ImageCtrl", new (std::nothrow) UppCtrlCreator<Upp::ImageCtrl>());
+    GetCache().Add("ImageCtrlEx", new (std::nothrow) UppCtrlCreator<UppImageCtrlEx>());
 }
 
 

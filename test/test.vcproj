@@ -318,6 +318,14 @@
 					Name="static"
 					>
 					<File
+						RelativePath=".\uppex\controls\static\UppImageCtrlEx.cc"
+						>
+					</File>
+					<File
+						RelativePath=".\uppex\controls\static\UppImageCtrlEx.h"
+						>
+					</File>
+					<File
 						RelativePath=".\uppex\controls\static\UppStaticEx.cpp"
 						>
 					</File>

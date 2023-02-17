@@ -160,8 +160,11 @@ void CUppSkinWnd::OnBuildFinished() {
     EditField* inputname = dynamic_cast<EditField*>(GetCtrlByLayoutId("inputname"));
     inputname->NoBackground(true);
 
-    ImageCtrl* image1 = dynamic_cast<ImageCtrl*>(GetCtrlByLayoutId("image1"));
-    image1->SetImage(theSkinMgr.ExtractImage("res/image/wechatclean_cache.png"));
+    //ImageCtrl* image1 = dynamic_cast<ImageCtrl*>(GetCtrlByLayoutId("image1"));
+    //image1->SetImage(theSkinMgr.ExtractImage("res/image/search.png"));
+
+    //ImageCtrl* image2 = dynamic_cast<ImageCtrl*>(GetCtrlByLayoutId("image2"));
+    //image2->SetImage(theSkinMgr.ExtractImage("res/image/backup_sms.png"));
 }
 
 void CUppSkinWnd::OnWindowClose() {
@@ -450,13 +453,18 @@ LRESULT CUppSkinWnd::OnNcMouseEvent0(UINT message, WPARAM wParam, LPARAM lParam 
     GetCursorPos(&point);
     if(message == WM_NCLBUTTONDOWN || message == WM_NCRBUTTONDOWN || message == WM_NCMBUTTONDOWN) {
         lRet = BaseWnd::WindowProc(message, wParam, lParam);
-    }else {
-        BOOL bDef = TRUE;
-        if(message == WM_NCLBUTTONDBLCLK && ~titlebar_ != NULL && HTCAPTION == wParam && maximizebox) {
-            POINT pt = point;
-            ScreenToClient(hWnd , &pt);
-            if(!titlebar_->GetRect().Contains(pt))
-                bDef = FALSE;
+    } else {
+        BOOL bDef = FALSE;
+        if(message == WM_NCLBUTTONDBLCLK) {
+            if(~titlebar_ != NULL && HTCAPTION == wParam && maximizebox) {
+                POINT pt = point;
+                ScreenToClient(hWnd , &pt);
+                if(titlebar_->GetRect().Contains(pt)) {
+                    bDef = TRUE;
+                }
+            }
+        } else {
+            bDef = TRUE;
         }
         if(bDef)
             lRet = DefWindowProc(hWnd , message, wParam, lParam);
@@ -635,11 +643,13 @@ LRESULT CUppSkinWnd::HitTest(const POINT &pt) {
     }
     Ctrl *mouseCtrl = GetMouseCtrl();
     if(mouseCtrl != NULL && HasChildDeep(mouseCtrl) && (mouseCtrl == this || dynamic_cast<ParentCtrl*>(mouseCtrl) != NULL)) {
-        if(mouseclientmove_ && lRet == HTCLIENT)
+        if(mouseclientmove_ && lRet == HTCLIENT) {
             lRet = HTCAPTION ;
+        }
     }else {
         lRet = HTCLIENT;
     }
+    
     return lRet;
 }
 
