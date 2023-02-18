@@ -160,6 +160,8 @@ void CUppSkinWnd::OnBuildFinished() {
     EditField* inputname = dynamic_cast<EditField*>(GetCtrlByLayoutId("inputname"));
     inputname->NoBackground(true);
 
+	//CenterWindow(GetHWND());
+
     //ImageCtrl* image1 = dynamic_cast<ImageCtrl*>(GetCtrlByLayoutId("image1"));
     //image1->SetImage(theSkinMgr.ExtractImage("res/image/search.png"));
 
@@ -521,6 +523,20 @@ LRESULT CUppSkinWnd::OnNcMouseEvent1(UINT message, WPARAM wParam, LPARAM lParam 
 LRESULT CUppSkinWnd::OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam) {
     SyncCaption();
     SyncTitle();
+	CWindow wnd = GetHWND();
+	wnd.CenterWindow();
+
+/* fullscreen app?
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+	CPoint ptLeftTop(1, 1), ptRightTop(screenWidth - 1, 1);
+	CPoint ptLeftBottom(1, screenHeight - 1), ptRightBottom(1, screenHeight - 1);
+	CWindow wndLT = WindowFromPoint(ptLeftTop);
+	CWindow wndRT = WindowFromPoint(ptRightTop);
+	CWindow wndLB = WindowFromPoint(ptLeftBottom);
+	CWindow wndRB = WindowFromPoint(ptRightBottom);
+*/
+
     return 1L;
 }
 
