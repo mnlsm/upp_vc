@@ -4,6 +4,7 @@
 NAMESPACE_UPPEX
 
 UppStaticEx::UppStaticEx() {
+    hittest = HTTRANSPARENT;
 }
 
 UppStaticEx::~UppStaticEx() {

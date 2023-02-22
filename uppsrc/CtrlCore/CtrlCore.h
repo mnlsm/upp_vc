@@ -402,9 +402,13 @@ private:
 
     byte         overpaint;
 
+
     bool         unicode: 1;
 
     bool         activex: 1;
+protected:
+    uint32       hittest;
+
 public:
     bool         fullrefresh: 1;
 private:
@@ -687,6 +691,7 @@ public:
 
     virtual BOOL SetAttrParam(BOOL bSetPrev, String attrId, String attrVal) {return TRUE;}
     virtual void OnSubCtrlCreate(Ctrl* c, const XmlNode &node) {}
+    virtual uint32 GetHitTest(Point p) {return hittest;}
 
 private:
     void    DoRemove();

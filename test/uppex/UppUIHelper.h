@@ -1,5 +1,18 @@
 #ifndef UPPUIHELPER_H__
 #define UPPUIHELPER_H__
+#pragma once
+
+#include <memory>
+
+
+#pragma warning(push, 3)
+#pragma push_macro("new")
+#undef new
+#include <gdiplus.h>
+#pragma pop_macro("new")
+#pragma warning( pop )
+#include <shlwapi.h>
+
 
 #include <core/core.h>
 #include <draw/Draw.h>
@@ -105,11 +118,24 @@ public:
 
 public:
     static void AdjustMarisaInnerFileData(Upp::String& filedata);
-
-
+    static BOOL LoadGdiplusImageFromBuffer(PBYTE buffer, DWORD bufferSize, std::tr1::shared_ptr<Gdiplus::Bitmap>& ret);
 
 };
 
+
+class CInitGDIPlus {
+public:
+	CInitGDIPlus();
+	~CInitGDIPlus();
+
+	bool Init();
+	void ReleaseGDIPlus();
+
+private:
+	ULONG_PTR m_dwToken;
+	CRITICAL_SECTION m_sect;
+	LONG m_nCImageObjects;
+};
 
 END_UPPEX_NAMESPACE
 

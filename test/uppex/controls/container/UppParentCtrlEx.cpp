@@ -6,6 +6,16 @@
 using namespace Upp;
 
 NAMESPACE_UPPEX
+
+UppParentCtrlEx::UppParentCtrlEx() {
+    hittest = HTTRANSPARENT;
+}
+
+UppParentCtrlEx::~UppParentCtrlEx() {
+
+}
+
+
 Upp::Image UppParentCtrlEx::CursorImage(Upp::Point p, Upp::dword keyflags) {
     Ctrl *top = GetTopCtrl();
     if(top) {

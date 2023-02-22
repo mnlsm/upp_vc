@@ -554,6 +554,7 @@ Ctrl::Ctrl() {
     fullrefresh = false;
     akv = false;
     hasdhctrl = false;
+    hittest = HTCLIENT;
 }
 
 void KillTimeCallbacks(void *id, void *idlim);

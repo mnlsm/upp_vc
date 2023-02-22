@@ -1,9 +1,145 @@
 #include "stdafx.h"
 #include "UppUIHelper.h"
 
+#ifndef _ATL_NO_DEFAULT_LIBS
+#pragma comment(lib, "gdi32.lib")
+#pragma comment(lib, "shlwapi.lib")
+#pragma comment(lib, "gdiplus.lib")
+#if WINVER >= 0x0500
+#pragma comment(lib, "msimg32.lib")
+#endif  // WINVER >= 0x0500
+#endif  // !_ATL_NO_DEFAULT_LIBS
+
+
 #define UPP_BOOL_RETURN( ret , boolptr , boolval ) do{ if( boolptr ){ *boolptr = (boolval);} return (ret); }while(false)
 
 using namespace Upp;
+
+namespace {
+class CStreamOnByteArray 
+    :public IStream {
+public:
+	BYTE *m_pArray;
+	DWORD m_dwRead;
+    DWORD m_dwLength;
+
+	CStreamOnByteArray(BYTE *pBytes, DWORD dwLen) throw() {
+		ATLASSERT(pBytes);
+		m_pArray = pBytes;
+        m_dwLength = dwLen;
+		m_dwRead = 0;
+	}
+
+	STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead) throw() {
+		if (!pv)
+			return E_INVALIDARG;
+		if (cb == 0)
+			return S_OK;
+		if (!m_pArray)
+			return E_UNEXPECTED;
+		BYTE *pCurr  = m_pArray;
+		pCurr += m_dwRead;
+		Checked::memcpy_s(pv, cb, pCurr, cb);
+		if (pcbRead)
+			*pcbRead = cb;
+		m_dwRead += cb;
+		return S_OK;
+	}
+
+	STDMETHOD(Write)(const void* , ULONG , ULONG* ) throw() {
+		return E_UNEXPECTED;
+	}
+
+	STDMETHOD(Seek)(LARGE_INTEGER diff, DWORD dwOrigin, ULARGE_INTEGER *pNewPos) throw()
+	{
+        if(STREAM_SEEK_CUR == dwOrigin) {
+            if(m_dwRead + diff.LowPart > m_dwLength) {
+                return E_FAIL;
+            }
+            m_dwRead = m_dwRead + diff.LowPart;
+        } else if(STREAM_SEEK_SET == dwOrigin) {
+            if(diff.LowPart > m_dwLength) {
+                return E_FAIL;
+            }
+            m_dwRead = diff.LowPart;
+        } else if(STREAM_SEEK_END == dwOrigin) {
+            if(diff.LowPart > m_dwLength) {
+                return E_FAIL;
+            }
+            m_dwRead = m_dwLength - diff.LowPart;
+        } else {
+            return E_FAIL;
+        }
+        if(pNewPos != NULL) {
+            (*pNewPos).HighPart = 0;
+            (*pNewPos).LowPart = m_dwRead;
+        }
+		return S_OK;
+	}
+
+	STDMETHOD(SetSize)(ULARGE_INTEGER ) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(CopyTo)(IStream *, ULARGE_INTEGER , ULARGE_INTEGER *,
+		ULARGE_INTEGER *) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(Commit)(DWORD ) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(Revert)( void) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(LockRegion)(ULARGE_INTEGER , ULARGE_INTEGER , DWORD ) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(UnlockRegion)(ULARGE_INTEGER , ULARGE_INTEGER ,
+		DWORD ) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(Stat)(STATSTG *pstatstg, DWORD flags) throw() {
+        if(pstatstg != NULL) {
+            pstatstg->cbSize.HighPart = 0;
+            pstatstg->cbSize.LowPart = m_dwLength;
+        }
+        return S_OK;
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(Clone)(IStream **) throw() {
+		return E_NOTIMPL;
+	}
+
+	STDMETHOD(QueryInterface)(REFIID iid, void **ppUnk) throw() {
+		*ppUnk = NULL;
+		if (::InlineIsEqualGUID(iid, IID_IUnknown) ||
+			::InlineIsEqualGUID(iid, IID_ISequentialStream) ||
+			::InlineIsEqualGUID(iid, IID_IStream)) {
+			*ppUnk = (void*)(IStream*)this;
+			AddRef();
+			return S_OK;
+		}
+		return E_NOINTERFACE;
+	}
+
+	ULONG STDMETHODCALLTYPE AddRef( void)  throw() {
+		return (ULONG)1;
+	}
+
+	ULONG STDMETHODCALLTYPE Release( void)  throw() {
+		return (ULONG)1;
+	}
+};
+
+
+
+}
 
 NAMESPACE_UPPEX
 
@@ -558,6 +694,11 @@ BOOL UppUIHelper::ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& k
         assert(false);            
         return FALSE;
     }
+    /*
+    if(key.Find("floatwnd_ad_bg.png") >= 0) {
+        GdiplusLoadImageToString(filedata, image);
+    }
+    */
     return TRUE;
 }
 
@@ -587,7 +728,7 @@ BOOL UppUIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
     if(attrId == "layid") {
         ctrl->LayoutId(attrVal);
     } else if(attrId == "layidc") {
-        ctrl->Tip(attrVal);
+        ctrl->LayoutId(attrVal);
     } else if(attrId == "tip") {
         ctrl->Tip(attrVal);
     } else if(attrId == "tabstop") {
@@ -848,6 +989,65 @@ HRGN UppUIHelper::CalcClipRegion(const RECT &rc , const std::vector<ClipRegionDa
     }
     OffsetRgn(hRgn , rc.left , rc.top);
     return hRgn;
+}
+
+
+BOOL UppUIHelper::LoadGdiplusImageFromBuffer(PBYTE buffer, DWORD bufferSize, 
+                             std::tr1::shared_ptr<Gdiplus::Bitmap>& ret) {
+    ret.reset();
+    if(bufferSize == 0) {
+        return FALSE;
+    }
+    do {
+        CStreamOnByteArray stream(buffer, bufferSize);
+        ret.reset(new Gdiplus::Bitmap((IStream*)&stream));
+        if(ret.get() != NULL && ret->GetLastStatus() != Gdiplus::Ok ) {
+	        ret.reset();
+            break;
+        }
+    } while(false);
+    return (ret.get() != NULL);
+}
+
+
+//-----------------------------------------------------------------------------------------------
+CInitGDIPlus::CInitGDIPlus() :
+        m_dwToken(0), m_nCImageObjects(0) {
+	__try {
+		InitializeCriticalSection(&m_sect);
+        Init();
+	} __except(EXCEPTION_EXECUTE_HANDLER) {
+		assert(false);
+	}
+}
+
+CInitGDIPlus::~CInitGDIPlus() {
+	ReleaseGDIPlus();
+	DeleteCriticalSection(&m_sect);
+}
+
+bool CInitGDIPlus::Init() {
+	EnterCriticalSection(&m_sect);
+	bool fRet = true;
+	if( m_dwToken == 0 ) {
+		Gdiplus::GdiplusStartupInput input;
+		Gdiplus::GdiplusStartupOutput output;
+		Gdiplus::Status status = Gdiplus::GdiplusStartup( &m_dwToken, &input, &output );
+		if( status != Gdiplus::Ok )
+			fRet = false;
+	}
+	LeaveCriticalSection(&m_sect);
+	return fRet;
+}
+
+void CInitGDIPlus::ReleaseGDIPlus() {
+	EnterCriticalSection(&m_sect);
+	if( m_dwToken != 0 )
+	{
+		Gdiplus::GdiplusShutdown( m_dwToken );
+	}
+	m_dwToken = 0;
+	LeaveCriticalSection(&m_sect);
 }
 
 END_UPPEX_NAMESPACE

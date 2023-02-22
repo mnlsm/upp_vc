@@ -221,11 +221,11 @@ void CUppSkinWnd::UpdateLayedWindowShow(BYTE byteConstantAlpha) {
             rc.Offset(-rc.TopLeft().x , -rc.TopLeft().y);
             UpdateArea(imgDraw, rc);
             painting = false;
-            BLENDFUNCTION Blend = {0};
-            Blend.BlendOp = AC_SRC_OVER;
-            Blend.BlendFlags = 0;
-            Blend.AlphaFormat = AC_SRC_ALPHA;
-            Blend.SourceConstantAlpha = byteConstantAlpha;
+            BLENDFUNCTION Blend = {AC_SRC_OVER, 0, byteConstantAlpha, AC_SRC_ALPHA };
+            //Blend.BlendOp = AC_SRC_OVER;
+            //Blend.BlendFlags = 0;
+            //Blend.AlphaFormat = AC_SRC_ALPHA;
+            //Blend.SourceConstantAlpha = byteConstantAlpha;
             CRect rcWnd;
             GetWindowRect(hwnd , & rcWnd);
             ::UpdateLayeredWindow(hwnd, dc,
@@ -658,7 +658,8 @@ LRESULT CUppSkinWnd::HitTest(const POINT &pt) {
         }
     }
     Ctrl *mouseCtrl = GetMouseCtrl();
-    if(mouseCtrl != NULL && HasChildDeep(mouseCtrl) && (mouseCtrl == this || dynamic_cast<ParentCtrl*>(mouseCtrl) != NULL)) {
+    if(mouseCtrl != NULL && HasChildDeep(mouseCtrl) 
+            && (mouseCtrl == this || mouseCtrl->GetHitTest(pt) == HTTRANSPARENT/*dynamic_cast<ParentCtrl*>(mouseCtrl) != NULL)*/)) {
         if(mouseclientmove_ && lRet == HTCLIENT) {
             lRet = HTCAPTION ;
         }

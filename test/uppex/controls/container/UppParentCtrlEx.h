@@ -9,10 +9,8 @@ NAMESPACE_UPPEX
 class UppParentCtrlEx
         : public Upp::ParentCtrl {
 public:
-    UppParentCtrlEx() {
-    };
-    ~UppParentCtrlEx() {
-    };
+    UppParentCtrlEx();
+    virtual ~UppParentCtrlEx();
 
 public:
     virtual Upp::Image CursorImage(Upp::Point p, Upp::dword keyflags);

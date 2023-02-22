@@ -180,6 +180,7 @@ Upp::String CUppSkinMgr::ExtractLayoutXml(Upp::String id) {
 CUppSkinMgr& CUppSkinMgr::GetInstance() {
     static CUppSkinMgr *p;
     ONCELOCK {
+        static CInitGDIPlus s_initGDIPlus;
         static CUppSkinMgr o;
         p = &o;
     }

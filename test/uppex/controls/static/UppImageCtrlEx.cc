@@ -5,6 +5,7 @@ using namespace Upp;
 NAMESPACE_UPPEX
 
 UppImageCtrlEx::UppImageCtrlEx() {
+    hittest = HTTRANSPARENT;
 }
 
 UppImageCtrlEx::~UppImageCtrlEx() {
@@ -16,6 +17,11 @@ BOOL UppImageCtrlEx::SetAttrParam(BOOL bSetPrev, String attrId, String attrVal) 
     }
     return TRUE;
 }
+
+void UppImageCtrlEx::Paint(Upp::Draw& w) {
+    Upp::ImageCtrl::Paint(w);
+}
+
 
 
 

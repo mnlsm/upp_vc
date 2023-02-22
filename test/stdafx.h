@@ -65,6 +65,7 @@
 #include <atlfile.h>
 #include <atltime.h>
 #include <atlsync.h>
+#include <atlimage.h>
 #include <ATLComTime.h>
 
 #include <map>
