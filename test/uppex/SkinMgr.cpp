@@ -51,18 +51,6 @@ BOOL SkinMgr::LoadSkinFromMarisaFile(const char *mrsfile) {
     return TRUE;
 }
 
-
-
-/*
-<skin name='xxxx'>
-    <color id='color_1' value='0xFFFFFFFF'/>
-    <image id='image_1' file='img\image_1.png'>
-    <images file='img\image_1.png' margin='10,10,10,10'>
-        <partimage id='image_1' sizerect='0,0,50,50'>
-    </images>
-</skin>
-*/
-
 BOOL SkinMgr::LoadSkinFromXmlFile(const char *xmlfile , bool filebom) {
     skinpath_ = Upp::GetFileFolder(xmlfile);
     String xmldata = filebom ? LoadFileBOM(xmlfile) : LoadFile(xmlfile);

@@ -44,32 +44,32 @@ void SkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
         //String attrVal = node.Attr("label");
         //if(!attrVal.IsEmpty()) button->SetLabel(attrVal);
         if(layid == "sys_closebtn") {
-            String skin = node.Attr("skin");
-            UpdateSysButtonStyle(button, skin);
+            String style = node.Attr("style");
+            UpdateSysButtonStyle(button, style);
             button->NoWantFocus();
             closeboxbtn_ = button;
             NoCloseBox(false);
         }else if(layid == "sys_minbtn") {
-            String skin = node.Attr("skin");
-            UpdateSysButtonStyle(button, skin);
+            String style = node.Attr("style");
+            UpdateSysButtonStyle(button, style);
             button->NoWantFocus();
             minboxbtn_ = button;
             minboxbtn_->NoWantFocus();
             MinimizeBox(true);
         }else if(layid == "sys_maxbtn") {
-            String skin = node.Attr("skin");
-            UpdateSysButtonStyle(button, skin);
+            String style = node.Attr("style");
+            UpdateSysButtonStyle(button, style);
             button->NoWantFocus();
             maxboxbtn_ = button;
             MaximizeBox(true);
         }else if(layid == "sys_restorebtn") {
-            String skin = node.Attr("skin");
-            UpdateSysButtonStyle(button, skin);
+            String style = node.Attr("style");
+            UpdateSysButtonStyle(button, style);
             button->NoWantFocus();
             restoreboxbtn_ = button;
         }else if(layid == "sys_sizebtn") {
-            String skin = node.Attr("skin");
-            UpdateSysButtonStyle(button, skin);
+            String style = node.Attr("style");
+            UpdateSysButtonStyle(button, style);
             button->NoWantFocus();
             sizeboxbtn_ = button;
             sizeboxbtn_->Show(true);

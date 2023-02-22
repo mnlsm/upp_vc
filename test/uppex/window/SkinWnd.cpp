@@ -48,18 +48,6 @@ BOOL SkinWnd::BuildFromSkinLayout(const char *layid) {
     return BuildFromXml(~xmldata);
 }
 
-/*
-<SkinWnd layid='mainwnd' skin='wnd_background_grid' wndsize='200,100' minsize='80,20' sizeable='false'
-         toolwnd='false' frameless='false' fullscreen='false' mouseclientmove='false'
-         topborder='4' bottomborder='4' leftborder='4' rightborder='4'>
-<ParentCtrl layid='sys_titlebar' HSizePos='5,5' TopPos='0,27'>
-    <Button layid='sys_close_btn' tip='关闭' skin='sys_close_btn' RightPos='1,39' TopPos='1,25'/>
-    <Button layid='sys_max_btn' tip='最大化' skin='sys_max_btn' RightPos='40,31' TopPos='1,25'/>
-    <Button layid='sys_min_btn' tip='最小化' skin='sys_min_btn' RightPos='72,31' TopPos='1,25'/>
-</ParentCtrl>
-<Button layid='sys_sizebtn' skin='sys_sizebtn' RightPos='1,4' BottomPos='1,4'>
-</skinwnd>
-*/
 BOOL SkinWnd::BuildFromXml(const char *xmlstr) {
     XmlNode xml = ParseXML(xmlstr);
     if(xml.IsEmpty())
@@ -92,7 +80,7 @@ BOOL SkinWnd::BuildFromXml(const char *xmlstr) {
             LayoutId(attrVal);
         } else if(attrTag == "layidc") {
             LayoutId(attrVal);
-        } else if(attrTag == "skin") {
+        } else if(attrTag == "style") {
             UpdateStyle(attrVal);
             szImg = skinstyle_.GetImageSize();
         }
