@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "UppParentCtrlEx.h"
-#include "../../window/UppSkinWnd.h"
+#include "ParentCtrlEx.h"
+#include "../../window/SkinWnd.h"
 
 
 using namespace Upp;
 
 NAMESPACE_UPPEX
 
-UppParentCtrlEx::UppParentCtrlEx() {
+ParentCtrlEx::ParentCtrlEx() {
     hittest = HTTRANSPARENT;
 }
 
-UppParentCtrlEx::~UppParentCtrlEx() {
+ParentCtrlEx::~ParentCtrlEx() {
 
 }
 
 
-Upp::Image UppParentCtrlEx::CursorImage(Upp::Point p, Upp::dword keyflags) {
+Upp::Image ParentCtrlEx::CursorImage(Upp::Point p, Upp::dword keyflags) {
     Ctrl *top = GetTopCtrl();
     if(top) {
-        if(dynamic_cast<CUppSkinWnd*>(top) != NULL) {
-            CUppSkinWnd *wnd = (CUppSkinWnd *)(top);
+        if(dynamic_cast<SkinWnd*>(top) != NULL) {
+            SkinWnd *wnd = (SkinWnd *)(top);
             POINT pt;
             GetCursorPos(&pt);
             ScreenToClient(wnd->GetHWND() , &pt);

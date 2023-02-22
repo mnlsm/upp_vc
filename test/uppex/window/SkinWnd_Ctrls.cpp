@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "UppSkinWnd.h"
-#include "../UppSkinMgr.h"
-#include "../controls/container/UppParentCtrlEx.h"
+#include "SkinWnd.h"
+#include "../SkinMgr.h"
+#include "../controls/container/ParentCtrlEx.h"
 
 using namespace Upp;
 #define LLOG(x)
@@ -19,7 +19,7 @@ static Ctrl* GetSubCtrlByLayoutId(Ctrl* ctrl , const char *id) {
 }
 
 NAMESPACE_UPPEX
-Upp::Ctrl* CUppSkinWnd::GetCtrlByLayoutId(const char *id) {
+Upp::Ctrl* SkinWnd::GetCtrlByLayoutId(const char *id) {
     if(GetLayoutId() == id) {
         return this;
     }
@@ -30,7 +30,7 @@ Upp::Ctrl* CUppSkinWnd::GetCtrlByLayoutId(const char *id) {
     return GetSubCtrlByLayoutId(this , id);
 }
 
-void CUppSkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
+void SkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
     const String& tag = node.GetTag();
     String layidc = node.Attr("layidc");
     if(!layidc.IsEmpty()) {
@@ -77,12 +77,12 @@ void CUppSkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
         }
     } else if(tag == "ParentCtrlEx") {
         if(layid == "sys_titlebar") {
-            titlebar_ = dynamic_cast<UppParentCtrlEx*>(ctrl);
+            titlebar_ = dynamic_cast<ParentCtrlEx*>(ctrl);
         }
     }
 }
 
-BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
+BOOL SkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     const String& tag = node.GetTag();
     if(tag == "wndclippings") {
         if(!skinalpha_) {
@@ -102,7 +102,7 @@ BOOL CUppSkinWnd::CreateChildCtrls(Upp::Ctrl *parent , const XmlNode &node) {
     return TRUE;
 }
 // transcolor='255,0,255'
-void CUppSkinWnd::ResetClippings(const Upp::XmlNode &node) {
+void SkinWnd::ResetClippings(const Upp::XmlNode &node) {
     calc_skin_rgn_ = false;
     for(int i = 0 ; i < node.GetCount() ; i++) {
         const Upp::XmlNode &item = node[i];
@@ -113,16 +113,16 @@ void CUppSkinWnd::ResetClippings(const Upp::XmlNode &node) {
                 const String &attrId = item.AttrId(ai);
                 const String &attrVal = item.Attr(ai);
                 if(attrId == "LeftPos") {
-                    pt = UppUIHelper::ParsePoint(attrVal);
+                    pt = UIHelper::ParsePoint(attrVal);
                     clip.pos.x = Ctrl::PosLeft(pt.x , pt .y);
                 }else if(attrId == "RightPos") {
-                    pt = UppUIHelper::ParsePoint(attrVal);
+                    pt = UIHelper::ParsePoint(attrVal);
                     clip.pos.x = Ctrl::PosRight(pt.x , pt .y);
                 }else if(attrId == "TopPos") {
-                    pt = UppUIHelper::ParsePoint(attrVal);
+                    pt = UIHelper::ParsePoint(attrVal);
                     clip.pos.y = Ctrl::PosTop(pt.x , pt .y);
                 }else if(attrId == "BottomPos") {
-                    pt = UppUIHelper::ParsePoint(attrVal);
+                    pt = UIHelper::ParsePoint(attrVal);
                     clip.pos.y = Ctrl::PosBottom(pt.x , pt .y);
                 }
             }

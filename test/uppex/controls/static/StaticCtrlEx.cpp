@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "UppStaticEx.h"
+#include "StaticCtrlEx.h"
 
 NAMESPACE_UPPEX
 
-UppStaticEx::UppStaticEx() {
+StaticCtrlEx::StaticCtrlEx() {
     hittest = HTTRANSPARENT;
 }
 
-UppStaticEx::~UppStaticEx() {
+StaticCtrlEx::~StaticCtrlEx() {
 }
 
 

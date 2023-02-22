@@ -2,22 +2,22 @@
 #define UPPSKINMGR_H__
 
 
-#include "UppUIHelper.h"
-#include "UppCtrlCreator.h"
+#include "UIHelper.h"
+#include "CtrlCreator.h"
 
 
 
 NAMESPACE_UPPEX
 
-class CUppSkinMgr
+class SkinMgr
         : Upp::NoCopy {
 public:
-    CUppSkinMgr();
-    ~CUppSkinMgr();
+    SkinMgr();
+    ~SkinMgr();
 
 public:
-    static CUppSkinMgr& GetInstance();
-    void Swap(CUppSkinMgr& other);
+    static SkinMgr& GetInstance();
+    void Swap(SkinMgr& other);
 
 public:
     BOOL CreateSkinToMarisaFile(const char* skinpath, const char* outfile);
@@ -47,9 +47,9 @@ private:
 END_UPPEX_NAMESPACE
 
 #ifdef flagNONAMESPACE
-#define theSkinMgr CUppSkinMgr::GetInstance()
+#define theSkinMgr SkinMgr::GetInstance()
 #else
-#define theSkinMgr Uppex::CUppSkinMgr::GetInstance()
+#define theSkinMgr Uppex::SkinMgr::GetInstance()
 #endif
 
 #endif

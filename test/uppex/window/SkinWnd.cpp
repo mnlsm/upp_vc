@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "UppSkinWnd.h"
+#include "SkinWnd.h"
 #include "resource.h"
 
 using namespace Upp;
@@ -16,7 +16,7 @@ using namespace Upp;
 
 NAMESPACE_UPPEX
 
-CUppSkinWnd::CUppSkinWnd()
+SkinWnd::SkinWnd()
     : Upp::TopWindow() {
     topborder_ = UPPSKINWND_TOPBORDER;
     bottomborder_ = UPPSKINWND_BOTTOMBORDER;
@@ -34,16 +34,16 @@ CUppSkinWnd::CUppSkinWnd()
 
 }
 
-CUppSkinWnd::~CUppSkinWnd() {
+SkinWnd::~SkinWnd() {
 }
 
 
-BOOL CUppSkinWnd::BuildFromXmlFile(const char *xmlfile , bool filebom) {
+BOOL SkinWnd::BuildFromXmlFile(const char *xmlfile , bool filebom) {
     String xmldata = filebom ? LoadFileBOM(xmlfile) : LoadFile(xmlfile);
     return BuildFromXml(~xmldata);
 }
 
-BOOL CUppSkinWnd::BuildFromSkinLayout(const char *layid) {
+BOOL SkinWnd::BuildFromSkinLayout(const char *layid) {
     String xmldata = theSkinMgr.ExtractLayoutXml(String(layid));
     return BuildFromXml(~xmldata);
 }
@@ -60,7 +60,7 @@ BOOL CUppSkinWnd::BuildFromSkinLayout(const char *layid) {
 <Button layid='sys_sizebtn' skin='sys_sizebtn' RightPos='1,4' BottomPos='1,4'>
 </skinwnd>
 */
-BOOL CUppSkinWnd::BuildFromXml(const char *xmlstr) {
+BOOL SkinWnd::BuildFromXml(const char *xmlstr) {
     XmlNode xml = ParseXML(xmlstr);
     if(xml.IsEmpty())
         return FALSE;
@@ -96,21 +96,21 @@ BOOL CUppSkinWnd::BuildFromXml(const char *xmlstr) {
             UpdateStyle(attrVal);
             szImg = skinstyle_.GetImageSize();
         }
-        else if(attrTag == "defsize") szDef = UppUIHelper::ParseSize(attrVal);
-        else if(attrTag == "minsize") szMin = UppUIHelper::ParseSize(attrVal);
-        else if(attrTag == "sizeable") _sizeable = UppUIHelper::ParseBool(attrVal) ;
-        else if(attrTag == "toolwnd") _toolwnd =  UppUIHelper::ParseBool(attrVal) ;
-        else if(attrTag == "frameless") _frameless = UppUIHelper::ParseBool(attrVal) ;
-        else if(attrTag == "fullscreen") _fullscreen = UppUIHelper::ParseBool(attrVal) ;
-        else if(attrTag == "mouseclientmove") mouseclientmove_ = UppUIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "defsize") szDef = UIHelper::ParseSize(attrVal);
+        else if(attrTag == "minsize") szMin = UIHelper::ParseSize(attrVal);
+        else if(attrTag == "sizeable") _sizeable = UIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "toolwnd") _toolwnd =  UIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "frameless") _frameless = UIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "fullscreen") _fullscreen = UIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "mouseclientmove") mouseclientmove_ = UIHelper::ParseBool(attrVal) ;
         else if(attrTag == "topborder") topborder_ = (UINT)atoi(attrVal) ;
         else if(attrTag == "bottomborder") bottomborder_ = (UINT)atoi(attrVal) ;
         else if(attrTag == "leftborder") leftborder_ = (UINT)atoi(attrVal) ;
         else if(attrTag == "rightborder") rightborder_ = (UINT)atoi(attrVal) ;
         else if(attrTag == "title") Title(attrVal);
-        else if(attrTag == "skinalpha") skinalpha_ = UppUIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "skinalpha") skinalpha_ = UIHelper::ParseBool(attrVal) ;
         else if(attrTag == "constalpha") constalpha_ = (Upp::byte)(UINT)atoi(attrVal) ;
-        else if(attrTag == "calc_skin_rgn") calc_skin_rgn_ = UppUIHelper::ParseBool(attrVal) ;
+        else if(attrTag == "calc_skin_rgn") calc_skin_rgn_ = UIHelper::ParseBool(attrVal) ;
     }
     if(szMin.cx < szImg.cx) szMin.cx = szImg.cx;
     if(szMin.cy < szImg.cy) szMin.cy = szImg.cy;
@@ -137,20 +137,20 @@ BOOL CUppSkinWnd::BuildFromXml(const char *xmlstr) {
     SetRect(rcDef);
 
     if(~closeboxbtn_ != NULL)
-        *closeboxbtn_ << callback(this , &CUppSkinWnd::OnWindowClose);
+        *closeboxbtn_ << callback(this , &SkinWnd::OnWindowClose);
     if(~minboxbtn_ != NULL)
-        *minboxbtn_ << callback(this , &CUppSkinWnd::OnWindowMinimize);
+        *minboxbtn_ << callback(this , &SkinWnd::OnWindowMinimize);
     if(~maxboxbtn_ != NULL)
-        *maxboxbtn_ << callback(this , &CUppSkinWnd::OnWindowMaximize);
+        *maxboxbtn_ << callback(this , &SkinWnd::OnWindowMaximize);
     if(~restoreboxbtn_ != NULL)
-        *restoreboxbtn_ << callback(this , &CUppSkinWnd::OnWindowMaximize);
+        *restoreboxbtn_ << callback(this , &SkinWnd::OnWindowMaximize);
 
     OnBuildFinished();
     //FrameTop
     return TRUE;
 }
 
-void CUppSkinWnd::OnBuildFinished() {
+void SkinWnd::OnBuildFinished() {
     WithDropChoice<EditString> *withdropchoice = dynamic_cast<WithDropChoice<EditString>*>(GetCtrlByLayoutId("userlist"));
     withdropchoice->AddList("ssss");
     withdropchoice->AddList("aaaa");
@@ -169,23 +169,23 @@ void CUppSkinWnd::OnBuildFinished() {
     //image2->SetImage(theSkinMgr.ExtractImage("res/image/backup_sms.png"));
 }
 
-void CUppSkinWnd::OnWindowClose() {
+void SkinWnd::OnWindowClose() {
     Close();
 }
 
-void CUppSkinWnd::OnWindowMaximize() {
+void SkinWnd::OnWindowMaximize() {
     if(state != MAXIMIZED)
         Maximize(true);
     else
         Overlap(false);
 }
 
-void CUppSkinWnd::OnWindowMinimize() {
+void SkinWnd::OnWindowMinimize() {
     Minimize(true);
 }
 
 
-void CUppSkinWnd::WndInvalidateRect(const Rect& r) {
+void SkinWnd::WndInvalidateRect(const Rect& r) {
     BaseWnd::WndInvalidateRect(r);
     if(skinalpha_) {
         if(delayrefreshnum_ <= 0) {
@@ -196,7 +196,7 @@ void CUppSkinWnd::WndInvalidateRect(const Rect& r) {
     }
 }
 
-void CUppSkinWnd::WndScrollView(const Rect& r, int dx, int dy) {
+void SkinWnd::WndScrollView(const Rect& r, int dx, int dy) {
     BaseWnd::WndScrollView(r , dx , dy);
     if(skinalpha_) {
         if(delayrefreshnum_ <= 0) {
@@ -207,7 +207,7 @@ void CUppSkinWnd::WndScrollView(const Rect& r, int dx, int dy) {
     }
 }
 
-void CUppSkinWnd::UpdateLayedWindowShow(BYTE byteConstantAlpha) {
+void SkinWnd::UpdateLayedWindowShow(BYTE byteConstantAlpha) {
     HWND hwnd = GetHWND();
     if(IsVisible() && !IsIconic(hwnd)) {
         if(IsVisible())
@@ -237,7 +237,7 @@ void CUppSkinWnd::UpdateLayedWindowShow(BYTE byteConstantAlpha) {
     }
 }
 
-LRESULT CUppSkinWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT SkinWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
     LRESULT lRet = 0L;
     BOOL bHandled = FALSE;
     switch(message) {
@@ -311,7 +311,7 @@ LRESULT CUppSkinWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
     return lRet;
 }
 
-LRESULT CUppSkinWnd::OnSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     LRESULT lRet = BaseWnd::WindowProc(message, wParam, lParam);
     HWND hWnd = GetHWND();
     if(hWnd != NULL && !IsIconic(hWnd)) {
@@ -322,11 +322,11 @@ LRESULT CUppSkinWnd::OnSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &b
             ImageDraw iw(rc.Width()  , rc.Height());
             DrawBackground(iw.Alpha());
             DrawBackground(iw);
-            UppUIHelper::GetImageDrawClipRegionData(iw.Get(false) , &vClippings_);
+            UIHelper::GetImageDrawClipRegionData(iw.Get(false) , &vClippings_);
         }
         if(!vClippings_.empty()) {
             RECT rcc = { 0 , 0 , rc.Width() , rc.Height() };
-            hRgn = UppUIHelper::CalcClipRegion(rc , &vClippings_);
+            hRgn = UIHelper::CalcClipRegion(rc , &vClippings_);
         }
         if(hRgn) {
             SetWindowRgn(hWnd , hRgn , FALSE);
@@ -336,7 +336,7 @@ LRESULT CUppSkinWnd::OnSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &b
     return lRet;
 }
 
-LRESULT CUppSkinWnd::OnWindowPosChanged(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnWindowPosChanged(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     LRESULT lRet = BaseWnd::WindowProc(message, wParam, lParam);
     WINDOWPLACEMENT wp = {0};
     wp.length = sizeof(WINDOWINFO);
@@ -349,7 +349,7 @@ LRESULT CUppSkinWnd::OnWindowPosChanged(UINT message, WPARAM wParam, LPARAM lPar
     return lRet;
 }
 
-LRESULT CUppSkinWnd::OnDelayRefreshWindow(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnDelayRefreshWindow(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     if(--delayrefreshnum_ <= 0) {
         delayrefreshnum_ = 0;
         UpdateLayedWindowShow(constalpha_);
@@ -357,7 +357,7 @@ LRESULT CUppSkinWnd::OnDelayRefreshWindow(UINT message, WPARAM wParam, LPARAM lP
     return 1L;
 }
 
-LRESULT CUppSkinWnd::OnInitMenuPopup(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnInitMenuPopup(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     try {
         HMENU menu = (HMENU)wParam;
         UINT pos = GET_X_LPARAM(lParam);
@@ -373,7 +373,7 @@ LRESULT CUppSkinWnd::OnInitMenuPopup(UINT message, WPARAM wParam, LPARAM lParam 
     return 1L;
 }
 
-Upp::Image CUppSkinWnd::CursorImage(Upp::Point p, Upp::dword keyflags) {
+Upp::Image SkinWnd::CursorImage(Upp::Point p, Upp::dword keyflags) {
     POINT pt = { p.x , p.y };
     DWORD dwHitTest = (DWORD)HitTest(pt);
     Image imageCur;
@@ -392,7 +392,7 @@ Upp::Image CUppSkinWnd::CursorImage(Upp::Point p, Upp::dword keyflags) {
     return imageCur;
 }
 
-LRESULT CUppSkinWnd::OnSetCursor(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnSetCursor(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     HWND hWnd = GetHWND();
     if(hWnd) {
         if(hCursor && (HWND)wParam == hWnd) {
@@ -406,7 +406,7 @@ LRESULT CUppSkinWnd::OnSetCursor(UINT message, WPARAM wParam, LPARAM lParam , BO
     return 1L;
 }
 
-LRESULT CUppSkinWnd::OnCreate(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnCreate(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     if(skinalpha_ || constalpha_ != 0xFF) {
         CWindow(GetHWND()).ModifyStyleEx(0 , WS_EX_LAYERED , 0);
         if(skinalpha_)
@@ -418,37 +418,37 @@ LRESULT CUppSkinWnd::OnCreate(UINT message, WPARAM wParam, LPARAM lParam , BOOL 
     return 1L;
 }
 
-LRESULT CUppSkinWnd::OnGetMinMaxInfo(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnGetMinMaxInfo(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     bHandled = FALSE;
     return 0;
 }
 
-LRESULT CUppSkinWnd::OnNCActivate(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnNCActivate(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     Refresh();
     return 1L;
 }
 
-LRESULT CUppSkinWnd::OnActivate(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnActivate(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     return 0L;
 }
 
 
-LRESULT CUppSkinWnd::OnNcPaint(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnNcPaint(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     return 0L;
 }
 
-LRESULT CUppSkinWnd::OnNcCalcSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnNcCalcSize(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     return 0L;
 }
 
-LRESULT CUppSkinWnd::OnNcHitTest(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnNcHitTest(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     HWND hWnd = GetHWND();
     POINT pt = { GET_X_LPARAM(lParam) , GET_Y_LPARAM(lParam) };
     ScreenToClient(hWnd , &pt);
     return HitTest(pt);
 }
 
-LRESULT CUppSkinWnd::OnNcMouseEvent0(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnNcMouseEvent0(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     HWND hWnd = GetHWND();
     LRESULT lRet = 0;
     POINT point = {0};
@@ -510,7 +510,7 @@ LRESULT CUppSkinWnd::OnNcMouseEvent0(UINT message, WPARAM wParam, LPARAM lParam 
     return lRet;
 }
 
-LRESULT CUppSkinWnd::OnNcMouseEvent1(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
+LRESULT SkinWnd::OnNcMouseEvent1(UINT message, WPARAM wParam, LPARAM lParam , BOOL &bHandled) {
     HWND hWnd = GetHWND();
     bHandled = FALSE;
     POINT pt = { 0 , 0 };
@@ -520,7 +520,7 @@ LRESULT CUppSkinWnd::OnNcMouseEvent1(UINT message, WPARAM wParam, LPARAM lParam 
     return 0L;
 }
 
-LRESULT CUppSkinWnd::OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT SkinWnd::OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam) {
     SyncCaption();
     SyncTitle();
 	CWindow wnd = GetHWND();
@@ -540,15 +540,15 @@ LRESULT CUppSkinWnd::OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam
     return 1L;
 }
 
-void CUppSkinWnd::Paint(Draw& w) {
+void SkinWnd::Paint(Draw& w) {
     if(IsIconic(GetHWND()))
         return;
     DrawBackground(w);
 }
 
-void CUppSkinWnd::SyncCaption() {
+void SkinWnd::SyncCaption() {
     GuiLock __;
-    LLOG("CUppSkinWnd::SyncCaption");
+    LLOG("SkinWnd::SyncCaption");
     if(fullscreen)
         return;
     HWND hwnd = GetHWND();
@@ -607,21 +607,21 @@ void CUppSkinWnd::SyncCaption() {
 }
 
 
-void CUppSkinWnd::DrawBackground(Upp::Draw& w) {
+void SkinWnd::DrawBackground(Upp::Draw& w) {
     Rect rc = GetRect();
     rc.Offset(-rc.left , -rc.top);
-    if(skinstyle_.bkgnd_type_ == CUppSkinWnd::Style::FIXED)
+    if(skinstyle_.bkgnd_type_ == SkinWnd::Style::FIXED)
         w.DrawImage(rc.left , rc.top , rc.GetWidth() , rc.GetHeight() , skinstyle_.image_[0]);
-    else if(skinstyle_.bkgnd_type_ == CUppSkinWnd::Style::GRID)
-        UppUIHelper::DrawGridImage(w , Rect(rc.TopLeft() , rc.GetSize()) , skinstyle_.image_);
-    else if(skinstyle_.bkgnd_type_ == CUppSkinWnd::Style::HORZ3)
-        UppUIHelper::DrawHorz3Image(w , Rect(rc.TopLeft() , rc.GetSize()) , skinstyle_.image_);
-    else if(skinstyle_.bkgnd_type_ == CUppSkinWnd::Style::VERT3)
-        UppUIHelper::DrawVert3Image(w , Rect(rc.TopLeft() , rc.GetSize()) , skinstyle_.image_);
+    else if(skinstyle_.bkgnd_type_ == SkinWnd::Style::GRID)
+        UIHelper::DrawGridImage(w , Rect(rc.TopLeft() , rc.GetSize()) , skinstyle_.image_);
+    else if(skinstyle_.bkgnd_type_ == SkinWnd::Style::HORZ3)
+        UIHelper::DrawHorz3Image(w , Rect(rc.TopLeft() , rc.GetSize()) , skinstyle_.image_);
+    else if(skinstyle_.bkgnd_type_ == SkinWnd::Style::VERT3)
+        UIHelper::DrawVert3Image(w , Rect(rc.TopLeft() , rc.GetSize()) , skinstyle_.image_);
     return;
 }
 
-LRESULT CUppSkinWnd::HitTest(const POINT &pt) {
+LRESULT SkinWnd::HitTest(const POINT &pt) {
     HWND hWnd = GetHWND();
     RECT rc = {0};
     GetClientRect(hWnd , &rc);
@@ -671,43 +671,43 @@ LRESULT CUppSkinWnd::HitTest(const POINT &pt) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const CUppSkinWnd::Style& CUppSkinWnd::GetStyle() {
+const SkinWnd::Style& SkinWnd::GetStyle() {
     return skinstyle_;
 }
 
-void CUppSkinWnd::SetStyle(const CUppSkinWnd::Style& style) {
+void SkinWnd::SetStyle(const SkinWnd::Style& style) {
     skinstyle_ = style;
 }
 
-const CUppSkinWnd::Style CUppSkinWnd::StyleNormal() {
-    CUppSkinWnd::Style style;
+const SkinWnd::Style SkinWnd::StyleNormal() {
+    SkinWnd::Style style;
     RGBA rgba;
     rgba.r = rgba.g = rgba.b = 0x00;
     rgba.a = 0xFF;
-    Image img = UppUIHelper::CreateMonoImage(rgba , Size(1, 1));
+    Image img = UIHelper::CreateMonoImage(rgba , Size(1, 1));
     for(int i = 0 ; i < 9 ; i++)
         style.image_[i] = img;
-    style.bkgnd_type_ = CUppSkinWnd::Style::GRID;
+    style.bkgnd_type_ = SkinWnd::Style::GRID;
     return style;
 }
 
 
-Size CUppSkinWnd::Style::GetImageSize() {
+Size SkinWnd::Style::GetImageSize() {
     Size sz(0 , 0);
-    if(bkgnd_type_ == CUppSkinWnd::Style::FIXED) {
+    if(bkgnd_type_ == SkinWnd::Style::FIXED) {
         sz.cx = image_[0].GetWidth();
         sz.cy = image_[0].GetHeight();
-    }else if(bkgnd_type_ == CUppSkinWnd::Style::HORZ3) {
+    }else if(bkgnd_type_ == SkinWnd::Style::HORZ3) {
         sz.cx = image_[0].GetWidth();
         sz.cy = image_[0].GetHeight()
                 + image_[1].GetHeight()
                 + image_[2].GetHeight();
-    }else if(bkgnd_type_ == CUppSkinWnd::Style::VERT3) {
+    }else if(bkgnd_type_ == SkinWnd::Style::VERT3) {
         sz.cx = image_[0].GetWidth()
                 + image_[1].GetWidth()
                 + image_[2].GetWidth();
         sz.cy = image_[0].GetHeight();
-    }else if(bkgnd_type_ == CUppSkinWnd::Style::GRID) {
+    }else if(bkgnd_type_ == SkinWnd::Style::GRID) {
         sz.cx = image_[0].GetWidth()
                 + image_[1].GetWidth()
                 + image_[2].GetWidth();
@@ -718,10 +718,10 @@ Size CUppSkinWnd::Style::GetImageSize() {
     return sz;
 }
 
-void CUppSkinWnd::UpdateStyle(String attrVal) {
+void SkinWnd::UpdateStyle(String attrVal) {
     if(attrVal == "wnd_background_grid") {
-        CUppSkinWnd::Style uppskinwnd_grid;
-        uppskinwnd_grid.bkgnd_type_ = CUppSkinWnd::Style::GRID;
+        SkinWnd::Style uppskinwnd_grid;
+        uppskinwnd_grid.bkgnd_type_ = SkinWnd::Style::GRID;
         uppskinwnd_grid.image_[0] = theSkinMgr.ExtractImage("wnd_topleft");
         uppskinwnd_grid.image_[1] = theSkinMgr.ExtractImage("wnd_topmiddle");
         uppskinwnd_grid.image_[2] = theSkinMgr.ExtractImage("wnd_topright");
@@ -733,8 +733,8 @@ void CUppSkinWnd::UpdateStyle(String attrVal) {
         uppskinwnd_grid.image_[8] = theSkinMgr.ExtractImage("wnd_bottomright");
         SetStyle(uppskinwnd_grid);   
     } else if(attrVal == "wnd_background_color_grid") {
-        CUppSkinWnd::Style uppskinwnd_color_grid;
-        uppskinwnd_color_grid.bkgnd_type_ = CUppSkinWnd::Style::GRID;
+        SkinWnd::Style uppskinwnd_color_grid;
+        uppskinwnd_color_grid.bkgnd_type_ = SkinWnd::Style::GRID;
         uppskinwnd_color_grid.image_[0] = theSkinMgr.ExtractImage("wnd_color_topleft");
         uppskinwnd_color_grid.image_[1] = theSkinMgr.ExtractImage("wnd_color_topmiddle");
         uppskinwnd_color_grid.image_[2] = theSkinMgr.ExtractImage("wnd_color_topright");
@@ -751,7 +751,7 @@ void CUppSkinWnd::UpdateStyle(String attrVal) {
     }
 }
 
-void CUppSkinWnd::UpdateSysButtonStyle(Upp::Button* button, Upp::String attrVal) {
+void SkinWnd::UpdateSysButtonStyle(Upp::Button* button, Upp::String attrVal) {
     if(attrVal == "sys_sizebtn") {
         std::tr1::shared_ptr<Upp::Button::Style> sizebox_style(new(std::nothrow) Button::Style());
         sysbtn_styles_.push_back(sizebox_style);

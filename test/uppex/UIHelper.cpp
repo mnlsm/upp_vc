@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "UppUIHelper.h"
+#include "UIHelper.h"
 
 #ifndef _ATL_NO_DEFAULT_LIBS
 #pragma comment(lib, "gdi32.lib")
@@ -143,20 +143,20 @@ public:
 
 NAMESPACE_UPPEX
 
-UppUIHelper::UppUIHelper() {
+UIHelper::UIHelper() {
 }
 
-UppUIHelper::~UppUIHelper() {
+UIHelper::~UIHelper() {
 }
 
-void UppUIHelper::AdjustMarisaInnerFileData(Upp::String& filedata) {
+void UIHelper::AdjustMarisaInnerFileData(Upp::String& filedata) {
     char mask = (char)(filedata.GetLength() % 0xFF);
     for(size_t ii = 0; ii < filedata.GetLength(); ii++) {
         filedata.Set(ii, (filedata[ii] ^ mask));
     }
 }
 
-Upp::RGBA UppUIHelper::ParseColor(const char *str , bool *suc) {
+Upp::RGBA UIHelper::ParseColor(const char *str , bool *suc) {
     RGBA rgba ;
     rgba.r = rgba.g = rgba.b = 0x00;
     rgba.a = 0xFF;
@@ -195,7 +195,7 @@ Upp::RGBA UppUIHelper::ParseColor(const char *str , bool *suc) {
     UPP_BOOL_RETURN(rgba , suc , true);
 }
 
-Rect UppUIHelper::ParseRect(const char *str , bool *suc) {
+Rect UIHelper::ParseRect(const char *str , bool *suc) {
     Rect rc(0 , 0 , 1 , 1);
     if(str == NULL) {
         UPP_BOOL_RETURN(rc , suc , false);
@@ -208,7 +208,7 @@ Rect UppUIHelper::ParseRect(const char *str , bool *suc) {
     UPP_BOOL_RETURN(rc , suc , true);
 }
 
-Rect UppUIHelper::ParseSizeRect(const char *str , bool *suc) {
+Rect UIHelper::ParseSizeRect(const char *str , bool *suc) {
     Rect rc = ParseRect(str , suc);
     if(suc != NULL && *suc) {
         rc.SetSize(rc.right , rc.bottom);
@@ -216,7 +216,7 @@ Rect UppUIHelper::ParseSizeRect(const char *str , bool *suc) {
     return rc;
 }
 
-Upp::Size UppUIHelper::ParseSize(const char *str , bool *suc) {
+Upp::Size UIHelper::ParseSize(const char *str , bool *suc) {
     Size sz(1 , 1);
     if(str == NULL) {
         UPP_BOOL_RETURN(sz , suc , false);
@@ -232,7 +232,7 @@ Upp::Size UppUIHelper::ParseSize(const char *str , bool *suc) {
     UPP_BOOL_RETURN(sz , suc , true);
 }
 
-Upp::Point UppUIHelper::ParsePoint(const char *str , bool *suc) {
+Upp::Point UIHelper::ParsePoint(const char *str , bool *suc) {
     Point pt(0 , 0);
     if(str == NULL) {
         UPP_BOOL_RETURN(pt , suc , false);
@@ -246,7 +246,7 @@ Upp::Point UppUIHelper::ParsePoint(const char *str , bool *suc) {
     UPP_BOOL_RETURN(pt , suc , true);
 }
 
-bool UppUIHelper::ParseBool(const char *str , bool *suc) {
+bool UIHelper::ParseBool(const char *str , bool *suc) {
     bool b = false;
     if(str == NULL) {
         UPP_BOOL_RETURN(b , suc , false);
@@ -257,7 +257,7 @@ bool UppUIHelper::ParseBool(const char *str , bool *suc) {
     UPP_BOOL_RETURN(b , suc , false);
 }
 
-BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppResData *ret) {
+BOOL UIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppResData *ret) {
     if(ret == NULL) return FALSE;
     bool suc = false;
     XmlNode xml = ParseXML(xmlstr);
@@ -294,7 +294,7 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
                 assert(false);
                 return FALSE;
             }
-            RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("value") , &suc);
+            RGBA rgba = UIHelper::ParseColor(resnode.Attr("value") , &suc);
             if(suc) {
                 colors.Add(id , Color(rgba));
             }
@@ -312,9 +312,9 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
             int nHeight = -MulDiv(font_size, GetDeviceCaps(Win32_IC(), LOGPIXELSY), 72);
             fdata.Height(nHeight);
             fdata.Width(resnode.AttrInt("width" , 0));
-            fdata.Bold(UppUIHelper::ParseBool(resnode.Attr("bold")));
-            fdata.Italic(UppUIHelper::ParseBool(resnode.Attr("italic")));
-            fdata.Underline(UppUIHelper::ParseBool(resnode.Attr("underline")));
+            fdata.Bold(UIHelper::ParseBool(resnode.Attr("bold")));
+            fdata.Italic(UIHelper::ParseBool(resnode.Attr("italic")));
+            fdata.Underline(UIHelper::ParseBool(resnode.Attr("underline")));
             if(fontface == "STDFONT") {
                 SetStdFont(fdata);
             }
@@ -339,24 +339,24 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
                     assert(false);
                     return FALSE;
                 }
-                RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("transcolor") , &suc);
+                RGBA rgba = UIHelper::ParseColor(resnode.Attr("transcolor") , &suc);
                 if(suc) {
-                    img = UppUIHelper::GetTransColorImage(img , rgba);
+                    img = UIHelper::GetTransColorImage(img , rgba);
                 }
                 images.Add(id , img);
             }else if(!resnode.Attr("mono").IsEmpty()) {
                 bool suc = false;
-                RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("mono") , &suc);
+                RGBA rgba = UIHelper::ParseColor(resnode.Attr("mono") , &suc);
                 if(!suc) {
                     assert(false);
                     return FALSE;
                 }
-                Size sz = UppUIHelper::ParseSize(resnode.Attr("size") , &suc);
+                Size sz = UIHelper::ParseSize(resnode.Attr("size") , &suc);
                 if(!suc) {
                     assert(false);
                     return FALSE;
                 }
-                images.Add(id , UppUIHelper::CreateMonoImage(rgba , sz));
+                images.Add(id , UIHelper::CreateMonoImage(rgba , sz));
             }
         }else if(resnode.IsTag("images")) {
 			String filename = resnode.Attr("file");
@@ -383,15 +383,15 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
                     assert(false);
                     return FALSE;
                 }
-                Rect rc = UppUIHelper::ParseSizeRect(partimg.Attr("sizerect") , &suc);
+                Rect rc = UIHelper::ParseSizeRect(partimg.Attr("sizerect") , &suc);
                 if(!suc) {
                     assert(false);
                     return FALSE;
                 }
                 Image retimg = Upp::Crop(img , rc);
-                RGBA rgba = UppUIHelper::ParseColor(partimg.Attr("transcolor") , &suc);
+                RGBA rgba = UIHelper::ParseColor(partimg.Attr("transcolor") , &suc);
                 if(suc) {
-                    retimg = UppUIHelper::GetTransColorImage(retimg , rgba);
+                    retimg = UIHelper::GetTransColorImage(retimg , rgba);
                 }
                 images.Add(id , retimg);
             }
@@ -452,11 +452,11 @@ BOOL UppUIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppR
     return TRUE;
 }
 
-BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , UppResData *ret) {
+BOOL UIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , UppResData *ret) {
     String xmlstr;
     try {
         String resid_key("res.xml");
-        UppUIHelper::ExtraXmlFromTrie(trie, resid_key, xmlstr);
+        UIHelper::ExtraXmlFromTrie(trie, resid_key, xmlstr);
     } catch(marisa::Exception& e) {
         assert(false);
         e;
@@ -500,7 +500,7 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
                 assert(false);
                 return FALSE;
             }
-            RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("value") , &suc);
+            RGBA rgba = UIHelper::ParseColor(resnode.Attr("value") , &suc);
             if(suc) {
                 colors.Add(id , Color(rgba));
             }
@@ -518,9 +518,9 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
             int nHeight = -MulDiv(font_size, GetDeviceCaps(Win32_IC(), LOGPIXELSY), 72);
             fdata.Height(nHeight);
             fdata.Width(resnode.AttrInt("width" , 0));
-            fdata.Bold(UppUIHelper::ParseBool(resnode.Attr("bold")));
-            fdata.Italic(UppUIHelper::ParseBool(resnode.Attr("italic")));
-            fdata.Underline(UppUIHelper::ParseBool(resnode.Attr("underline")));
+            fdata.Bold(UIHelper::ParseBool(resnode.Attr("bold")));
+            fdata.Italic(UIHelper::ParseBool(resnode.Attr("italic")));
+            fdata.Underline(UIHelper::ParseBool(resnode.Attr("underline")));
             if(fontface == "STDFONT") {
                 SetStdFont(fdata);
             }
@@ -538,24 +538,24 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
                     assert(false);
                     return FALSE;
                 }
-                RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("transcolor") , &suc);
+                RGBA rgba = UIHelper::ParseColor(resnode.Attr("transcolor") , &suc);
                 if(suc) {
-                    img = UppUIHelper::GetTransColorImage(img , rgba);
+                    img = UIHelper::GetTransColorImage(img , rgba);
                 }
                 images.Add(id , img);
             }else if(!resnode.Attr("mono").IsEmpty()) {
                 bool suc = false;
-                RGBA rgba = UppUIHelper::ParseColor(resnode.Attr("mono") , &suc);
+                RGBA rgba = UIHelper::ParseColor(resnode.Attr("mono") , &suc);
                 if(!suc) {
                     assert(false);
                     return FALSE;
                 }
-                Size sz = UppUIHelper::ParseSize(resnode.Attr("size") , &suc);
+                Size sz = UIHelper::ParseSize(resnode.Attr("size") , &suc);
                 if(!suc) {
                     assert(false);
                     return false;
                 }
-                images.Add(id , UppUIHelper::CreateMonoImage(rgba , sz));
+                images.Add(id , UIHelper::CreateMonoImage(rgba , sz));
             }
         }else if(resnode.IsTag("images")) {
             String file = resnode.Attr("file");
@@ -575,15 +575,15 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
                     assert(false);
                     return FALSE;
                 }
-                Rect rc = UppUIHelper::ParseSizeRect(partimg.Attr("sizerect") , &suc);
+                Rect rc = UIHelper::ParseSizeRect(partimg.Attr("sizerect") , &suc);
                 if(!suc) {
                     assert(false);
                     return FALSE;
                 }
                 Image retimg = Upp::Crop(img , rc);
-                RGBA rgba = UppUIHelper::ParseColor(partimg.Attr("transcolor") , &suc);
+                RGBA rgba = UIHelper::ParseColor(partimg.Attr("transcolor") , &suc);
                 if(suc) {
-                    retimg = UppUIHelper::GetTransColorImage(retimg , rgba);
+                    retimg = UIHelper::GetTransColorImage(retimg , rgba);
                 }
                 images.Add(id , retimg);
             }
@@ -596,7 +596,7 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
             if(!resnode.Attr("file").IsEmpty()) {
                 String file = resnode.Attr("file");
                 String filedata;
-                if(!UppUIHelper::ExtraDataFromTrie(trie, file, filedata)) {
+                if(!UIHelper::ExtraDataFromTrie(trie, file, filedata)) {
                     assert(false);
                     return FALSE;
                 }
@@ -636,7 +636,7 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
             if(!resnode.Attr("file").IsEmpty()) {
                 String file = resnode.Attr("file");
                 String filedata;
-                if(!UppUIHelper::ExtraDataFromTrie(trie, file, filedata)) {
+                if(!UIHelper::ExtraDataFromTrie(trie, file, filedata)) {
                     assert(false);
                     return FALSE;
                 }
@@ -669,7 +669,7 @@ BOOL UppUIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath 
     return TRUE;
 }
 
-BOOL UppUIHelper::ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& filedata) {
+BOOL UIHelper::ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& filedata) {
     filedata.Clear();
     size_t keysize = key.GetLength() + 1;
     marisa::Agent agent;
@@ -683,7 +683,7 @@ BOOL UppUIHelper::ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& ke
     return TRUE;
 }
 
-BOOL UppUIHelper::ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::Image& image) {
+BOOL UIHelper::ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::Image& image) {
     Upp::String filedata;
     if(!ExtraDataFromTrie(trie, key, filedata)) {
         return FALSE;
@@ -702,7 +702,7 @@ BOOL UppUIHelper::ExtraImageFromTrie(marisa::SecTrie& trie, const Upp::String& k
     return TRUE;
 }
 
-BOOL UppUIHelper::ExtraXmlFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& xmlstr) {
+BOOL UIHelper::ExtraXmlFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& xmlstr) {
     if(!ExtraDataFromTrie(trie, key, xmlstr)) {
         return FALSE;
     }    
@@ -722,7 +722,7 @@ BOOL UppUIHelper::ExtraXmlFromTrie(marisa::SecTrie& trie, const Upp::String& key
     return TRUE;
 }
 
-BOOL UppUIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
+BOOL UIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
     Size sz(0 , 0);
     Point pt(0 , 0);
     if(attrId == "layid") {
@@ -732,54 +732,54 @@ BOOL UppUIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
     } else if(attrId == "tip") {
         ctrl->Tip(attrVal);
     } else if(attrId == "tabstop") {
-        ctrl->WantFocus(UppUIHelper::ParseBool(attrVal));
+        ctrl->WantFocus(UIHelper::ParseBool(attrVal));
     }else if(attrId == "HSizePos") {
-        sz = UppUIHelper::ParseSize(attrVal);
+        sz = UIHelper::ParseSize(attrVal);
         ctrl->HSizePos(sz.cx , sz.cy);
     }else if(attrId == "HSizePosZ") {
-        sz = UppUIHelper::ParseSize(attrVal);
+        sz = UIHelper::ParseSize(attrVal);
         ctrl->HSizePosZ(sz.cx , sz.cy);
     }else if(attrId == "VSizePos") {
-        sz = UppUIHelper::ParseSize(attrVal);
+        sz = UIHelper::ParseSize(attrVal);
         ctrl->VSizePos(sz.cx , sz.cy);
     }else if(attrId == "VSizePosZ") {
-        sz = UppUIHelper::ParseSize(attrVal);
+        sz = UIHelper::ParseSize(attrVal);
         ctrl->VSizePosZ(sz.cx , sz.cy);
     }else if(attrId == "HCenterPos") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->HCenterPos(pt.x , pt.y);
     }else if(attrId == "HCenterPosZ") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->HCenterPosZ(pt.x , pt.y);
     }else if(attrId == "VCenterPos") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->VCenterPos(pt.x , pt.y);
     }else if(attrId == "VCenterPosZ") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->VCenterPosZ(pt.x , pt.y);
     }else if(attrId == "LeftPos") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->LeftPos(pt.x , pt.y);
     }else if(attrId == "LeftPosZ") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->LeftPosZ(pt.x , pt.y);
     }else if(attrId == "RightPos") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->RightPos(pt.x , pt.y);
     }else if(attrId == "RightPosZ") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->RightPosZ(pt.x , pt.y);
     }else if(attrId == "TopPos") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->TopPos(pt.x , pt.y);
     }else if(attrId == "TopPosZ") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->TopPosZ(pt.x , pt.y);
     }else if(attrId == "BottomPos") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->BottomPos(pt.x , pt.y);
     }else if(attrId == "BottomPosZ") {
-        pt = UppUIHelper::ParsePoint(attrVal);
+        pt = UIHelper::ParsePoint(attrVal);
         ctrl->BottomPosZ(pt.x , pt.y);
     } else {
         return FALSE;
@@ -788,7 +788,7 @@ BOOL UppUIHelper::SetCtrlParam(Upp::Ctrl* ctrl, String attrId, String attrVal) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Upp::Image UppUIHelper::CreateMonoImage(Upp::RGBA rgba , Upp::Size sz) {
+Upp::Image UIHelper::CreateMonoImage(Upp::RGBA rgba , Upp::Size sz) {
     ImageBuffer buf(sz);
     RGBA *b = ~buf;
     RGBA *e = b + buf.GetLength();
@@ -799,7 +799,7 @@ Upp::Image UppUIHelper::CreateMonoImage(Upp::RGBA rgba , Upp::Size sz) {
     return buf;
 }
 
-Upp::Image UppUIHelper::GetTransColorImage(Upp::Image img , Upp::RGBA rgba) {
+Upp::Image UIHelper::GetTransColorImage(Upp::Image img , Upp::RGBA rgba) {
     ImageBuffer buf(img);
     for(int i = 0 ; i < buf.GetHeight() ; i++) {
         for(int j = 0 ; j < buf.GetWidth() ; j++) {
@@ -812,7 +812,7 @@ Upp::Image UppUIHelper::GetTransColorImage(Upp::Image img , Upp::RGBA rgba) {
     return buf;
 }
 
-void UppUIHelper::DrawGridImage(Draw& w , Upp::Rect rc , Upp::Image images[9]) {
+void UIHelper::DrawGridImage(Draw& w , Upp::Rect rc , Upp::Image images[9]) {
     int width = rc.GetWidth();
     int height = rc.GetHeight();
     if(width < images[0].GetWidth() + images[1].GetWidth() + images[2].GetWidth())
@@ -835,7 +835,7 @@ void UppUIHelper::DrawGridImage(Draw& w , Upp::Rect rc , Upp::Image images[9]) {
     w.DrawImage(rc.right - images[8].GetWidth() , rc.bottom - images[8].GetHeight() , images[8].GetWidth() , images[8].GetHeight() , images[8]);
 }
 
-void UppUIHelper::DrawHorz3Image(Upp::Draw& w , Upp::Rect rc , Upp::Image images[3]) {
+void UIHelper::DrawHorz3Image(Upp::Draw& w , Upp::Rect rc , Upp::Image images[3]) {
     int width = rc.GetWidth();
     int height = rc.GetHeight();
     if(width < images[0].GetWidth() + images[1].GetWidth() + images[2].GetWidth())
@@ -847,7 +847,7 @@ void UppUIHelper::DrawHorz3Image(Upp::Draw& w , Upp::Rect rc , Upp::Image images
 
 }
 
-void UppUIHelper::DrawVert3Image(Upp::Draw& w , Upp::Rect rc , Upp::Image images[3]) {
+void UIHelper::DrawVert3Image(Upp::Draw& w , Upp::Rect rc , Upp::Image images[3]) {
     int width = rc.GetWidth();
     int height = rc.GetHeight();
     if(height < images[0].GetWidth() + images[1].GetWidth() + images[2].GetWidth())
@@ -858,7 +858,7 @@ void UppUIHelper::DrawVert3Image(Upp::Draw& w , Upp::Rect rc , Upp::Image images
     w.DrawImage(rc.left , rc.bottom - images[2].GetHeight() , images[2].GetWidth() , images[2].GetHeight() , images[2]);
 }
 
-HRGN UppUIHelper::CalcImageDrawRegion(Upp::Image &w) {
+HRGN UIHelper::CalcImageDrawRegion(Upp::Image &w) {
     HRGN hRgn = NULL;
     Size sz = w.GetSize();
     const RGBA *rgba  = ~w;
@@ -929,7 +929,7 @@ HRGN UppUIHelper::CalcImageDrawRegion(Upp::Image &w) {
     return hRgn;
 }
 
-void UppUIHelper::GetImageDrawClipRegionData(Upp::Image &w , std::vector<ClipRegionData> *vClips) {
+void UIHelper::GetImageDrawClipRegionData(Upp::Image &w , std::vector<ClipRegionData> *vClips) {
     if(vClips == NULL) return ;
     vClips->clear();
     Size sz = w.GetSize();
@@ -960,7 +960,7 @@ void UppUIHelper::GetImageDrawClipRegionData(Upp::Image &w , std::vector<ClipReg
     return;
 }
 
-HRGN UppUIHelper::CalcClipRegion(const RECT &rc , const std::vector<ClipRegionData> *vClips) {
+HRGN UIHelper::CalcClipRegion(const RECT &rc , const std::vector<ClipRegionData> *vClips) {
     if(vClips == NULL) return NULL;
     if(vClips->empty()) return NULL;
     HRGN hRgn = CreateRectRgn(0 , 0 , rc.right - rc.left + 1, rc.bottom - rc.top + 1);
@@ -992,7 +992,7 @@ HRGN UppUIHelper::CalcClipRegion(const RECT &rc , const std::vector<ClipRegionDa
 }
 
 
-BOOL UppUIHelper::LoadGdiplusImageFromBuffer(PBYTE buffer, DWORD bufferSize, 
+BOOL UIHelper::LoadGdiplusImageFromBuffer(PBYTE buffer, DWORD bufferSize, 
                              std::tr1::shared_ptr<Gdiplus::Bitmap>& ret) {
     ret.reset();
     if(bufferSize == 0) {

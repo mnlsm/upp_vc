@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "UppSkinMgr.h"
+#include "SkinMgr.h"
 #include "assert.h"
 
 using namespace Upp;
@@ -8,13 +8,13 @@ using namespace stdext;
 
 NAMESPACE_UPPEX
 
-CUppSkinMgr::CUppSkinMgr() {
+SkinMgr::SkinMgr() {
 }
 
-CUppSkinMgr::~CUppSkinMgr() {
+SkinMgr::~SkinMgr() {
 }
 
-BOOL CUppSkinMgr::LoadSkinFromMarisaFile(const char *mrsfile) {
+BOOL SkinMgr::LoadSkinFromMarisaFile(const char *mrsfile) {
     skinpath_ = Upp::GetFileFolder(mrsfile);
     FileIn in;
     if(!in.Open(mrsfile)) {
@@ -45,7 +45,7 @@ BOOL CUppSkinMgr::LoadSkinFromMarisaFile(const char *mrsfile) {
             return FALSE;
         }
     }
-    if(!UppUIHelper::LoadResFromMarisa(trie_, skinpath_, &resdata_)) {
+    if(!UIHelper::LoadResFromMarisa(trie_, skinpath_, &resdata_)) {
         return FALSE;
     }
     return TRUE;
@@ -63,20 +63,20 @@ BOOL CUppSkinMgr::LoadSkinFromMarisaFile(const char *mrsfile) {
 </skin>
 */
 
-BOOL CUppSkinMgr::LoadSkinFromXmlFile(const char *xmlfile , bool filebom) {
+BOOL SkinMgr::LoadSkinFromXmlFile(const char *xmlfile , bool filebom) {
     skinpath_ = Upp::GetFileFolder(xmlfile);
     String xmldata = filebom ? LoadFileBOM(xmlfile) : LoadFile(xmlfile);
-    if(!UppUIHelper::LoadResFromXml(~xmldata , skinpath_ , &resdata_)) {
+    if(!UIHelper::LoadResFromXml(~xmldata , skinpath_ , &resdata_)) {
         return FALSE;
     }
     return TRUE;
 }
 
-const char* CUppSkinMgr::GetName() {
+const char* SkinMgr::GetName() {
     return ~resdata_.resname_;
 }
 
-Upp::Color CUppSkinMgr::ExtractColor(Upp::String id , Upp::byte alpha) {
+Upp::Color SkinMgr::ExtractColor(Upp::String id , Upp::byte alpha) {
     Color *clr = resdata_.colors_.FindPtr(id);
     if(clr != NULL) {
         if(alpha != 0xFF) {
@@ -93,7 +93,7 @@ Upp::Color CUppSkinMgr::ExtractColor(Upp::String id , Upp::byte alpha) {
     return Color(rgba);;
 }
 
-Upp::Font CUppSkinMgr::ExtractFont(Upp::String id) {
+Upp::Font SkinMgr::ExtractFont(Upp::String id) {
     if(resdata_.fonts_.Find(id) >= 0) {
         return resdata_.fonts_.Get(id);
     }
@@ -101,13 +101,13 @@ Upp::Font CUppSkinMgr::ExtractFont(Upp::String id) {
     return GetStdFont();
 }
 
-Upp::Image CUppSkinMgr::ExtractImage(Upp::String id) {
+Upp::Image SkinMgr::ExtractImage(Upp::String id) {
     Image *image = resdata_.images_.FindPtr(id);
     if(image != NULL) {
         return *image;
     }
     Image img;
-    if(UppUIHelper::ExtraImageFromTrie(trie_, id, img)) {
+    if(UIHelper::ExtraImageFromTrie(trie_, id, img)) {
         resdata_.images_.Add(id, img);
         image = resdata_.images_.FindPtr(id);
         if(image != NULL) {
@@ -118,10 +118,10 @@ Upp::Image CUppSkinMgr::ExtractImage(Upp::String id) {
     RGBA rgba;
     rgba.r = rgba.g = rgba.b = 0;
     rgba.a = 0xFF;
-    return UppUIHelper::CreateMonoImage(rgba, Size(1,1));
+    return UIHelper::CreateMonoImage(rgba, Size(1,1));
 }
 
-Upp::Image CUppSkinMgr::ExtractSmallIcon(Upp::String id) {
+Upp::Image SkinMgr::ExtractSmallIcon(Upp::String id) {
     Image *image = resdata_.small_icons_.FindPtr(id);
     if(image != NULL) {
        return *image;
@@ -130,11 +130,11 @@ Upp::Image CUppSkinMgr::ExtractSmallIcon(Upp::String id) {
     RGBA rgba;
     rgba.r = rgba.g = rgba.b = 0;
     rgba.a = 0xFF;
-    return UppUIHelper::CreateMonoImage(rgba, 
+    return UIHelper::CreateMonoImage(rgba, 
         Size(GetSystemMetrics(SM_CXSMICON),GetSystemMetrics(SM_CXSMICON)));
 }
 
-Upp::Image CUppSkinMgr::ExtractLargeIcon(Upp::String id) {
+Upp::Image SkinMgr::ExtractLargeIcon(Upp::String id) {
     Image *image = resdata_.large_icons_.FindPtr(id);
     if(image != NULL) {
        return *image;
@@ -143,12 +143,12 @@ Upp::Image CUppSkinMgr::ExtractLargeIcon(Upp::String id) {
     RGBA rgba;
     rgba.r = rgba.g = rgba.b = 0;
     rgba.a = 0xFF;
-    return UppUIHelper::CreateMonoImage(rgba, 
+    return UIHelper::CreateMonoImage(rgba, 
         Size(GetSystemMetrics(SM_CXICON),GetSystemMetrics(SM_CXICON)));
 }
 
 
-Upp::Image CUppSkinMgr::ExtractCursor(Upp::String id) {
+Upp::Image SkinMgr::ExtractCursor(Upp::String id) {
     Image *image = resdata_.cursors_.FindPtr(id);
     if(image != NULL) {
        return *image;
@@ -157,14 +157,14 @@ Upp::Image CUppSkinMgr::ExtractCursor(Upp::String id) {
     RGBA rgba;
     rgba.r = rgba.g = rgba.b = 0;
     rgba.a = 0xFF;
-    return UppUIHelper::CreateMonoImage(rgba, 
+    return UIHelper::CreateMonoImage(rgba, 
         Size(GetSystemMetrics(SM_CXCURSOR),GetSystemMetrics(SM_CXCURSOR)));
 }
 
-Upp::String CUppSkinMgr::ExtractLayoutXml(Upp::String id) {
+Upp::String SkinMgr::ExtractLayoutXml(Upp::String id) {
     String xmlstr;
     try {
-        UppUIHelper::ExtraXmlFromTrie(trie_, id, xmlstr);
+        UIHelper::ExtraXmlFromTrie(trie_, id, xmlstr);
     } catch(marisa::Exception& e) {
         assert(false);
         e;
@@ -177,17 +177,17 @@ Upp::String CUppSkinMgr::ExtractLayoutXml(Upp::String id) {
 }
 
 
-CUppSkinMgr& CUppSkinMgr::GetInstance() {
-    static CUppSkinMgr *p;
+SkinMgr& SkinMgr::GetInstance() {
+    static SkinMgr *p;
     ONCELOCK {
         static CInitGDIPlus s_initGDIPlus;
-        static CUppSkinMgr o;
+        static SkinMgr o;
         p = &o;
     }
     return *p;
 }
 
-void CUppSkinMgr::Swap(CUppSkinMgr& other) {
+void SkinMgr::Swap(SkinMgr& other) {
     if(this != &other) {
         Upp::Swap(skinpath_, other.skinpath_);
         Upp::Swap(trie_filedata_, other.trie_filedata_);
@@ -211,7 +211,7 @@ static void SearchForFiles( Vector<String>& files, String dir  ) {
     }
 }
 
-BOOL CUppSkinMgr::CreateSkinToMarisaFile(const char* skinpath, const char* outfile) {
+BOOL SkinMgr::CreateSkinToMarisaFile(const char* skinpath, const char* outfile) {
     Vector<String> files;
     SearchForFiles(files , skinpath);
     if(!files.IsEmpty()) {
@@ -231,7 +231,7 @@ BOOL CUppSkinMgr::CreateSkinToMarisaFile(const char* skinpath, const char* outfi
                 in.Seek(0);
                 size_t filesize = (size_t)in.GetStreamSize();
                 String filedata = in.Get(filesize);
-                UppUIHelper::AdjustMarisaInnerFileData(filedata);
+                UIHelper::AdjustMarisaInnerFileData(filedata);
                 String kv;
                 kv.Cat(file);
                 kv.Remove(0, strlen(skinpath) + 1);

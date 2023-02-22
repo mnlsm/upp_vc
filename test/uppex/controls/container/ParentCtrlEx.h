@@ -1,16 +1,16 @@
-#ifndef UPPEX_UPPPARENTCTRLEX_H__
-#define UPPEX_UPPPARENTCTRLEX_H__
+#ifndef UPPEX_ParentCtrlEx_H__
+#define UPPEX_ParentCtrlEx_H__
 #pragma once
 
 
-#include "../../UppSkinMgr.h"
+#include "../../SkinMgr.h"
 
 NAMESPACE_UPPEX
-class UppParentCtrlEx
+class ParentCtrlEx
         : public Upp::ParentCtrl {
 public:
-    UppParentCtrlEx();
-    virtual ~UppParentCtrlEx();
+    ParentCtrlEx();
+    virtual ~ParentCtrlEx();
 
 public:
     virtual Upp::Image CursorImage(Upp::Point p, Upp::dword keyflags);

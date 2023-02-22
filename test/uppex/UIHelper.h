@@ -1,5 +1,5 @@
-#ifndef UPPUIHELPER_H__
-#define UPPUIHELPER_H__
+#ifndef UIHelper_H__
+#define UIHelper_H__
 #pragma once
 
 #include <memory>
@@ -78,10 +78,10 @@ typedef struct tagClipRegionData {
 } ClipRegionData, *LPClipRegionData;
 
 
-class UppUIHelper {
+class UIHelper {
 private:
-    UppUIHelper();
-    ~UppUIHelper();
+    UIHelper();
+    ~UIHelper();
 
 public:
     static Upp::Rect ParseRect(const char *str , bool *suc = NULL);

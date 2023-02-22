@@ -1,29 +1,29 @@
 #include "stdafx.h"
-#include "UppCtrlCreator.h"
-#include "UppUIHelper.h"
+#include "CtrlCreator.h"
+#include "UIHelper.h"
 #include <assert.h>
 
-#include "controls/container/UppParentCtrlEx.h"
-#include "controls/static/UppImageCtrlEx.h"
+#include "controls/container/ParentCtrlEx.h"
+#include "controls/static/ImageCtrlEx.h"
 
 
 namespace {
-class IUppCtrlCreator 
+class ICtrlCreator 
     :public Upp::PteBase {
 protected:
-    IUppCtrlCreator(){}
-    virtual ~IUppCtrlCreator() {}
+    ICtrlCreator(){}
+    virtual ~ICtrlCreator() {}
 
 public:
     virtual Upp::Ctrl* Create() = 0;
 };
-typedef Upp::Ptr<IUppCtrlCreator> UppCtrlCreatorPtr;
+typedef Upp::Ptr<ICtrlCreator> CtrlCreatorPtr;
 
-template<class T> class UppCtrlCreator
-        :public IUppCtrlCreator {
+template<class T> class CtrlCreator
+        :public ICtrlCreator {
 public:
-    UppCtrlCreator(){}
-    virtual ~UppCtrlCreator() {}
+    CtrlCreator(){}
+    virtual ~CtrlCreator() {}
 
 public:
     virtual Upp::Ctrl* Create() {
@@ -38,10 +38,10 @@ public:
 
 using namespace Upp;
 
-static Upp::VectorMap<Upp::String , UppCtrlCreatorPtr>& GetCache() {
-    static Upp::VectorMap<Upp::String , UppCtrlCreatorPtr> *p;
+static Upp::VectorMap<Upp::String , CtrlCreatorPtr>& GetCache() {
+    static Upp::VectorMap<Upp::String , CtrlCreatorPtr> *p;
     ONCELOCK {
-        static Upp::VectorMap<Upp::String , UppCtrlCreatorPtr> o;
+        static Upp::VectorMap<Upp::String , CtrlCreatorPtr> o;
         p = &o;
     }
     return *p;
@@ -49,17 +49,17 @@ static Upp::VectorMap<Upp::String , UppCtrlCreatorPtr>& GetCache() {
 
 NAMESPACE_UPPEX
 void InitializeUppCtrlCreators() {
-    GetCache().Add("ParentCtrlEx", new (std::nothrow) UppCtrlCreator<UppParentCtrlEx>());
-    GetCache().Add("Button", new (std::nothrow) UppCtrlCreator<Upp::Button>());
-    GetCache().Add("EditField", new (std::nothrow) UppCtrlCreator<Upp::EditField>());
-    GetCache().Add("WithDropChoice", new (std::nothrow) UppCtrlCreator<Upp::WithDropChoice<EditString>>());
-    GetCache().Add("ImageCtrlEx", new (std::nothrow) UppCtrlCreator<UppImageCtrlEx>());
+    GetCache().Add("ParentCtrlEx", new (std::nothrow) CtrlCreator<ParentCtrlEx>());
+    GetCache().Add("Button", new (std::nothrow) CtrlCreator<Upp::Button>());
+    GetCache().Add("EditField", new (std::nothrow) CtrlCreator<Upp::EditField>());
+    GetCache().Add("WithDropChoice", new (std::nothrow) CtrlCreator<Upp::WithDropChoice<EditString>>());
+    GetCache().Add("ImageCtrlEx", new (std::nothrow) CtrlCreator<ImageCtrlEx>());
 }
 
 
 Upp::Ctrl* CreateUppCtrlByTag(Ctrl *parent, const XmlNode &node) {
     const String& tag = node.GetTag();
-    UppCtrlCreatorPtr* creator = GetCache().FindPtr(tag);
+    CtrlCreatorPtr* creator = GetCache().FindPtr(tag);
     if(creator == NULL) {
         assert(false);
         return NULL;
@@ -75,7 +75,7 @@ Upp::Ctrl* CreateUppCtrlByTag(Ctrl *parent, const XmlNode &node) {
     for(int i = 0 ; i < node.GetAttrCount() ; i++) {
         const String &attrId = node.AttrId(i);
         const String &attrVal = node.Attr(i);
-        BOOL ret = UppUIHelper::SetCtrlParam(ctrl, attrId, attrVal);
+        BOOL ret = UIHelper::SetCtrlParam(ctrl, attrId, attrVal);
         ret = ctrl->SetAttrParam(ret, attrId, attrVal);
         if(!ret) {
             ASSERT(FALSE);

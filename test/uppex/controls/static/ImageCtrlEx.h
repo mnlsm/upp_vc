@@ -1,15 +1,15 @@
-#ifndef UPPEX_UPPIMAGECTRLEX_H__
-#define UPPEX_UPPIMAGECTRLEX_H__
+#ifndef UPPEX_ImageCtrlEx_H__
+#define UPPEX_ImageCtrlEx_H__
 
-#include "../../UppSkinMgr.h"
+#include "../../SkinMgr.h"
 
 NAMESPACE_UPPEX
 
-class UppImageCtrlEx
+class ImageCtrlEx
         : public Upp::ImageCtrl {
 public:
-    UppImageCtrlEx();
-    virtual ~UppImageCtrlEx();
+    ImageCtrlEx();
+    virtual ~ImageCtrlEx();
 
 public:
     virtual void Paint(Upp::Draw& w);

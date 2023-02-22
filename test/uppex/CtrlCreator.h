@@ -1,7 +1,7 @@
 #ifndef UPP_CTRLCREATOREX_H__
 #define UPP_CTRLCREATOREX_H__
 
-#include "UppUIHelper.h"
+#include "UIHelper.h"
 
 NAMESPACE_UPPEX
 void InitializeUppCtrlCreators();

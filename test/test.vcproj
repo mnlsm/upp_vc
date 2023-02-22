@@ -276,27 +276,27 @@
 			Name="uppex"
 			>
 			<File
-				RelativePath=".\uppex\UppCtrlCreator.cpp"
+				RelativePath=".\uppex\CtrlCreator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\UppCtrlCreator.h"
+				RelativePath=".\uppex\CtrlCreator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\UppSkinMgr.cpp"
+				RelativePath=".\uppex\SkinMgr.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\UppSkinMgr.h"
+				RelativePath=".\uppex\SkinMgr.h"
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\UppUIHelper.cpp"
+				RelativePath=".\uppex\UIHelper.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\uppex\UppUIHelper.h"
+				RelativePath=".\uppex\UIHelper.h"
 				>
 			</File>
 			<Filter
@@ -306,11 +306,11 @@
 					Name="container"
 					>
 					<File
-						RelativePath=".\uppex\controls\container\UppParentCtrlEx.cpp"
+						RelativePath=".\uppex\controls\container\ParentCtrlEx.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\uppex\controls\container\UppParentCtrlEx.h"
+						RelativePath=".\uppex\controls\container\ParentCtrlEx.h"
 						>
 					</File>
 				</Filter>
@@ -318,19 +318,19 @@
 					Name="static"
 					>
 					<File
-						RelativePath=".\uppex\controls\static\UppImageCtrlEx.cc"
+						RelativePath=".\uppex\controls\static\ImageCtrlEx.cc"
 						>
 					</File>
 					<File
-						RelativePath=".\uppex\controls\static\UppImageCtrlEx.h"
+						RelativePath=".\uppex\controls\static\ImageCtrlEx.h"
 						>
 					</File>
 					<File
-						RelativePath=".\uppex\controls\static\UppStaticEx.cpp"
+						RelativePath=".\uppex\controls\static\StaticCtrlEx.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\uppex\controls\static\UppStaticEx.h"
+						RelativePath=".\uppex\controls\static\StaticCtrlEx.h"
 						>
 					</File>
 				</Filter>
@@ -339,15 +339,15 @@
 				Name="window"
 				>
 				<File
-					RelativePath=".\uppex\window\UppSkinWnd.cpp"
+					RelativePath=".\uppex\window\SkinWnd.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\uppex\window\UppSkinWnd.h"
+					RelativePath=".\uppex\window\SkinWnd.h"
 					>
 				</File>
 				<File
-					RelativePath=".\uppex\window\UppSkinWnd_Ctrls.cpp"
+					RelativePath=".\uppex\window\SkinWnd_Ctrls.cpp"
 					>
 				</File>
 			</Filter>

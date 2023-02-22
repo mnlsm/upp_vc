@@ -7,8 +7,8 @@
 #include <draw/draw.h>
 
 
-#include "uppex/window/UppSkinWnd.h"
-#include "uppex/UppSkinMgr.h"
+#include "uppex/window/SkinWnd.h"
+#include "uppex/SkinMgr.h"
 using namespace Upp;
 
 #define LAYOUTFILE <AddressBook/AddressBook.lay>
@@ -527,7 +527,7 @@ GUI_APP_MAIN {
     String main_path = Upp::AppendFileName(GetFileFolder(path) , FromSystemCharset("skins\\д╛хо\\mainwnd.xml"));
 
     if(true) {
-        CUppSkinWnd wnd;
+        SkinWnd wnd;
         //wnd.BuildFromXmlFile(main_path , true);
         wnd.BuildFromSkinLayout("layout/mainwnd.xml");
         wnd.Run();

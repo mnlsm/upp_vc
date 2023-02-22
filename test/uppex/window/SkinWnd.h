@@ -5,15 +5,15 @@
 #include <CtrlLib/CtrlLib.h>
 #include <draw/draw.h>
 
-#include "../UppSkinMgr.h"
+#include "../SkinMgr.h"
 
 NAMESPACE_UPPEX
 
-class CUppSkinWnd
+class SkinWnd
         : public Upp::TopWindow {
 public:
-    CUppSkinWnd();
-    virtual ~CUppSkinWnd();
+    SkinWnd();
+    virtual ~SkinWnd();
     typedef Upp::TopWindow BaseWnd;
 
 public:
