@@ -137,6 +137,38 @@ public:
 	}
 };
 
+BOOL IsWindows7OrLater() {
+    static OSVERSIONINFO* posver = NULL;
+    ONCELOCK {
+	    static OSVERSIONINFO osver = { sizeof(osver) };
+        GetVersionEx(&osver);
+        posver = &osver;
+    }
+	return posver->dwPlatformId == VER_PLATFORM_WIN32_NT && 
+		posver->dwMajorVersion >= 6;
+}
+
+
+String AdjustFontFaceName(const String& id, String facename) {
+    String result = facename;
+    if(id.Find("sys_") == 0) {
+        if(IsWindows7OrLater() != TRUE) {
+            result = "ËÎÌו";
+        } else {
+            NONCLIENTMETRICS ncm = {0};
+            ncm.cbSize = sizeof(ncm);
+            if(TRUE != ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0)) {
+                assert(false);
+            }
+#ifdef _UNICODE
+            result = FromSystemCharsetW(ncm.lfMessageFont.lfFaceName);
+#else
+            result = FromSystemCharset(String(ncm.lfMessageFont.lfFaceName));
+#endif
+        }
+    }
+    return result;
+}
 
 
 }
@@ -257,6 +289,26 @@ bool UIHelper::ParseBool(const char *str , bool *suc) {
     UPP_BOOL_RETURN(b , suc , false);
 }
 
+uint32 UIHelper::ParseAlignment(const String& str) {
+    uint32 result = Upp::ALIGN_NULL;
+    if(str == "left") {
+        result = Upp::ALIGN_LEFT;
+    } else if(str == "top") {
+        result = Upp::ALIGN_TOP;
+    } else if(str == "right") {
+        result = Upp::ALIGN_RIGHT;
+    } else if(str == "bottom") {
+        result = Upp::ALIGN_BOTTOM;
+    } else if(str == "center") {
+        result = Upp::ALIGN_CENTER;
+    } else if(str == "justify") {
+        result = Upp::ALIGN_JUSTIFY;
+    } else {
+        assert(false);
+    }
+    return result;
+}
+
 BOOL UIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppResData *ret) {
     if(ret == NULL) return FALSE;
     bool suc = false;
@@ -306,6 +358,7 @@ BOOL UIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppResD
             }
             Font fdata;
             String fontface = resnode.Attr("facename");
+            fontface = AdjustFontFaceName(id, fontface);
             if(fontface.IsEmpty()) fontface = "STDFONT";
             fdata.FaceName(fontface) ;
             int font_size = abs(resnode.AttrInt("pointsize" , 9));
@@ -315,7 +368,7 @@ BOOL UIHelper::LoadResFromXml(const char *xmlstr , const char *respath , UppResD
             fdata.Bold(UIHelper::ParseBool(resnode.Attr("bold")));
             fdata.Italic(UIHelper::ParseBool(resnode.Attr("italic")));
             fdata.Underline(UIHelper::ParseBool(resnode.Attr("underline")));
-            if(fontface == "STDFONT") {
+            if(id == "sys_default") {
                 SetStdFont(fdata);
             }
             fonts.Add(id , fdata);
@@ -512,6 +565,7 @@ BOOL UIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , U
             }
             Font fdata;
             String fontface = resnode.Attr("facename");
+			fontface = AdjustFontFaceName(id, fontface);
             if(fontface.IsEmpty()) fontface = "STDFONT";
             fdata.FaceName(fontface) ;
             int font_size = abs(resnode.AttrInt("pointsize" , 9));
@@ -521,7 +575,7 @@ BOOL UIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , U
             fdata.Bold(UIHelper::ParseBool(resnode.Attr("bold")));
             fdata.Italic(UIHelper::ParseBool(resnode.Attr("italic")));
             fdata.Underline(UIHelper::ParseBool(resnode.Attr("underline")));
-            if(fontface == "STDFONT") {
+            if(id == "sys_default") {
                 SetStdFont(fdata);
             }
             fonts.Add(id , fdata);
@@ -668,6 +722,7 @@ BOOL UIHelper::LoadResFromMarisa(marisa::SecTrie& trie , const char *respath , U
     ret->cursors_ = cursors;
     return TRUE;
 }
+
 
 BOOL UIHelper::ExtraDataFromTrie(marisa::SecTrie& trie, const Upp::String& key, Upp::String& filedata) {
     filedata.Clear();
@@ -1008,7 +1063,6 @@ BOOL UIHelper::LoadGdiplusImageFromBuffer(PBYTE buffer, DWORD bufferSize,
     } while(false);
     return (ret.get() != NULL);
 }
-
 
 //-----------------------------------------------------------------------------------------------
 CInitGDIPlus::CInitGDIPlus() :

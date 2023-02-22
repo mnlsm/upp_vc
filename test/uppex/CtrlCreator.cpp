@@ -5,7 +5,7 @@
 
 #include "controls/container/ParentCtrlEx.h"
 #include "controls/static/ImageCtrlEx.h"
-
+#include "controls/static/StaticCtrlEx.h"
 
 namespace {
 class ICtrlCreator 
@@ -54,6 +54,7 @@ void InitializeUppCtrlCreators() {
     GetCache().Add("EditField", new (std::nothrow) CtrlCreator<Upp::EditField>());
     GetCache().Add("WithDropChoice", new (std::nothrow) CtrlCreator<Upp::WithDropChoice<EditString>>());
     GetCache().Add("ImageCtrlEx", new (std::nothrow) CtrlCreator<ImageCtrlEx>());
+    GetCache().Add("StaticCtrlEx", new (std::nothrow) CtrlCreator<StaticCtrlEx>());
 }
 
 

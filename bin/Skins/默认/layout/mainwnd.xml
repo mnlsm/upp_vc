@@ -28,6 +28,9 @@
   <ImageCtrlEx layidc='image1' src='res/image/search.png' HCenterPos='96,0' TopPos='200,32' tabstop='false'/>
   <ImageCtrlEx layidc='image2' src='res/image/backup_sms.png' HCenterPos='88,0' TopPos='240,88' tabstop='false'/>
   <ImageCtrlEx layidc='image3' src='res/image/fw_clear_rock.png' HCenterPos='52,0' TopPos='340,98' tabstop='false'/>
+  <StaticCtrlEx layidc='text1' text='测试' font='sys_font12' tclrid='color_blue' align='center' valign='center' HCenterPos='36,0' TopPos='450,20' tabstop='false'/>
+  
+  
   
 </ParentCtrlEx>
 

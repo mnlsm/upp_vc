@@ -15,7 +15,6 @@ public:
     virtual void Paint(Upp::Draw& w);
 
 public:
-    //virtual Upp::Image CursorImage(Upp::Point p, Upp::dword keyflags);
     virtual BOOL SetAttrParam(BOOL bSetPrev, Upp::String attrId, Upp::String attrVal);
 
 };

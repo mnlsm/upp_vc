@@ -1,6 +1,38 @@
 ﻿<skin name='default'>
   <color id='color_1' value='0xFFFFFFFF'/>
-  <font id='default_font' facename="宋体" pointsize='12' bold='false' italic='false' underline='false' width='0'/>
+  <color id='color_red' value='0xFFFF0000'/>
+  <color id='color_blue' value='0xFF0000FF'/>
+  
+  <font id='songti_font12' facename='宋体' pointsize='12' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_default' pointsize='12' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font8' pointsize='8' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font9' pointsize='9' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font10' pointsize='10' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font11' pointsize='11' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font12' pointsize='12' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font13' pointsize='13' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font14' pointsize='14' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font15' pointsize='15' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font16' pointsize='16' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font17' pointsize='17' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font18' pointsize='18' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font19' pointsize='19' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_font20' pointsize='20' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font8' pointsize='8' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font9' pointsize='9' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font10' pointsize='10' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font11' pointsize='11' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font12' pointsize='12' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font13' pointsize='13' bold='false' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font14' pointsize='14' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font15' pointsize='15' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font16' pointsize='16' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font17' pointsize='17' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font18' pointsize='18' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font19' pointsize='19' bold='true' italic='false' underline='false' width='0'/>
+  <font id='sys_bold_font20' pointsize='20' bold='true' italic='false' underline='false' width='0'/>
+  
+  
   <image id='sys_sizebox' mono='0x00000000' size='1,1'/>
   <icon id='main' file='res/icon/main.ico'/>
   <images file='res/image/sysbar_close.png'>

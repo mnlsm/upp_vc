@@ -90,6 +90,8 @@ public:
     static Upp::Point ParsePoint(const char *str , bool *suc = NULL);
     static bool ParseBool(const char *str , bool *suc = NULL);
     static Upp::RGBA ParseColor(const char *str , bool *suc = NULL);
+    static Upp::uint32 ParseAlignment(const Upp::String& str);
+
 
 public:
     static BOOL LoadResFromXml(const char *xmlstr , const char *respath , UppResData *ret);

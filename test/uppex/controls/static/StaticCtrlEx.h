@@ -5,14 +5,16 @@
 
 NAMESPACE_UPPEX
 class StaticCtrlEx
-        : public Upp::Ctrl {
+        : public Upp::Label {
 public:
     StaticCtrlEx();
     virtual ~StaticCtrlEx();
 
 public:
+    virtual void Paint(Upp::Draw& w);
 
-
+public:
+    virtual BOOL SetAttrParam(BOOL bSetPrev, Upp::String attrId, Upp::String attrVal);
 };
 
 END_UPPEX_NAMESPACE
