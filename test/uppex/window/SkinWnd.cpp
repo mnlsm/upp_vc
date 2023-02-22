@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SkinWnd.h"
-#include "resource.h"
+//#include "resource.h"
 
 using namespace Upp;
 
@@ -65,13 +65,8 @@ BOOL SkinWnd::BuildFromXml(const char *xmlstr) {
     bool _frameless = false;
     bool _fullscreen = false;
 
-    //LargeIcon(Win32Icon(IDI_MAINICON, GetSystemMetrics(SM_CXICON)));
-    //Icon(Win32Icon(IDI_MAINICON, GetSystemMetrics(SM_CXSMICON)));
-
-
     LargeIcon(theSkinMgr.ExtractLargeIcon("main"));
     Icon(theSkinMgr.ExtractSmallIcon("main"));
-
 
     for(int attr_i = 0 ; attr_i < wndNode.GetAttrCount() ; attr_i++) {
         String attrTag = wndNode.AttrId(attr_i);
@@ -636,16 +631,16 @@ LRESULT SkinWnd::HitTest(const POINT &pt) {
                 lRet = HTBOTTOMRIGHT;
         }
     }
+    Ctrl *mouseCtrl = GetMouseCtrl();
     if(~titlebar_ != NULL) {
         if(titlebar_->GetRect().Contains(pt.x , pt.y)) {
-            Ctrl *mouseCtrl = GetMouseCtrl();
-            if(mouseCtrl != NULL && HasChildDeep(mouseCtrl) && (mouseCtrl == this || dynamic_cast<ParentCtrl*>(mouseCtrl) != NULL)) {
+            if(mouseCtrl != NULL && HasChildDeep(mouseCtrl) 
+                    && (mouseCtrl == this || mouseCtrl->GetHitTest(pt) == HTTRANSPARENT/*dynamic_cast<ParentCtrl*>(mouseCtrl) != NULL*/)) {
                 if(lRet == HTCLIENT)
                     lRet = HTCAPTION;
             }
         }
     }
-    Ctrl *mouseCtrl = GetMouseCtrl();
     if(mouseCtrl != NULL && HasChildDeep(mouseCtrl) 
             && (mouseCtrl == this || mouseCtrl->GetHitTest(pt) == HTTRANSPARENT/*dynamic_cast<ParentCtrl*>(mouseCtrl) != NULL)*/)) {
         if(mouseclientmove_ && lRet == HTCLIENT) {
