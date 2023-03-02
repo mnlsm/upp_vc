@@ -6,7 +6,7 @@ using namespace Upp;
 using namespace std::tr1;
 using namespace stdext;
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 SkinMgr::SkinMgr() {
 }

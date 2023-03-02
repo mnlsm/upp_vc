@@ -14,7 +14,7 @@ using namespace Upp;
 
 #define DELAY_REFRESH_MSG WM_USER + 888
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 SkinWnd::SkinWnd()
     : Upp::TopWindow() {
@@ -508,18 +508,6 @@ LRESULT SkinWnd::OnCreateFinished(UINT message, WPARAM wParam, LPARAM lParam) {
     SyncTitle();
 	CWindow wnd = GetHWND();
 	wnd.CenterWindow();
-
-/* fullscreen app?
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-	CPoint ptLeftTop(1, 1), ptRightTop(screenWidth - 1, 1);
-	CPoint ptLeftBottom(1, screenHeight - 1), ptRightBottom(1, screenHeight - 1);
-	CWindow wndLT = WindowFromPoint(ptLeftTop);
-	CWindow wndRT = WindowFromPoint(ptRightTop);
-	CWindow wndLB = WindowFromPoint(ptLeftBottom);
-	CWindow wndRB = WindowFromPoint(ptRightBottom);
-*/
-
     return 1L;
 }
 

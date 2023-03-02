@@ -22,16 +22,7 @@
     <Button layid='sys_minbtn' tip='最小化' style='sys_minbtn' RightPos='71,31' TopPos='0,25'/>
   </ParentCtrlEx>
   <Button layid='sys_sizebtn' style='sys_sizebtn' RightPos='1,4' BottomPos='1,4'/>
-  <EditField layidc='inputname' HCenterPos='100,0' TopPos='100,20' tabstop='true'/>
-  <WithDropChoice layidc='userlist' HCenterPos='100,0' TopPos='140,20' tabstop='true'/>
-  <Button layidc='testbtn' label='测试' HSizePos='30,30' TopPos='170,24' tabstop='true'/>
-  <ImageCtrlEx layidc='image1' src='res/image/search.png' HCenterPos='96,0' TopPos='200,32' tabstop='false'/>
-  <ImageCtrlEx layidc='image2' src='res/image/backup_sms.png' HCenterPos='88,0' TopPos='240,88' tabstop='false'/>
-  <ImageCtrlEx layidc='image3' src='res/image/fw_clear_rock.png' HCenterPos='52,0' TopPos='340,98' tabstop='false'/>
-  <StaticCtrlEx layidc='text1' text='测试' font='sys_font12' tclrid='color_blue' align='center' valign='center' HCenterPos='36,0' TopPos='450,20' tabstop='false'/>
-  
-  
-  
+  <ParentCtrlStub layidc='contont1' layout='layout/stubs/test1.xml' HSizePos='4,4' VSizePos='28,4'/>
 </ParentCtrlEx>
 
 </SkinWnd>

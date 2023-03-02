@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "StaticCtrlEx.h"
 using namespace Upp;
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 StaticCtrlEx::StaticCtrlEx() {
     hittest = HTTRANSPARENT;

@@ -4,6 +4,8 @@
 #include <assert.h>
 
 #include "controls/container/ParentCtrlEx.h"
+#include "controls/container/ParentCtrlStub.h"
+
 #include "controls/static/ImageCtrlEx.h"
 #include "controls/static/StaticCtrlEx.h"
 
@@ -47,9 +49,10 @@ static Upp::VectorMap<Upp::String , CtrlCreatorPtr>& GetCache() {
     return *p;
 }
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 void InitializeUppCtrlCreators() {
     GetCache().Add("ParentCtrlEx", new (std::nothrow) CtrlCreator<ParentCtrlEx>());
+    GetCache().Add("ParentCtrlStub", new (std::nothrow) CtrlCreator<ParentCtrlStub>());
     GetCache().Add("Button", new (std::nothrow) CtrlCreator<Upp::Button>());
     GetCache().Add("EditField", new (std::nothrow) CtrlCreator<Upp::EditField>());
     GetCache().Add("WithDropChoice", new (std::nothrow) CtrlCreator<Upp::WithDropChoice<EditString>>());

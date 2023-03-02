@@ -313,6 +313,14 @@
 						RelativePath=".\uppex\controls\container\ParentCtrlEx.h"
 						>
 					</File>
+					<File
+						RelativePath=".\uppex\controls\container\ParentCtrlStub.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\uppex\controls\container\ParentCtrlStub.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="static"

@@ -5,7 +5,7 @@
 
 using namespace Upp;
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 ParentCtrlEx::ParentCtrlEx() {
     hittest = HTTRANSPARENT;

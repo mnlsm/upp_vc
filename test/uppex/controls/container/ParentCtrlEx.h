@@ -5,7 +5,7 @@
 
 #include "../../SkinMgr.h"
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 class ParentCtrlEx
         : public Upp::ParentCtrl {
 public:

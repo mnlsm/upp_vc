@@ -508,7 +508,7 @@ GUI_APP_MAIN {
 //   StoreToFile( ab );
     //SetWindowPos
     //WM_KILLFOCUS
-    using namespace Uppex;
+    using namespace uppex;
     InitializeUppCtrlCreators();
     WCHAR szVerifyPath[MAX_PATH];
     int a = sizeof(szVerifyPath);

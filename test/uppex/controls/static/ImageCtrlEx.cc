@@ -2,7 +2,7 @@
 #include "ImageCtrlEx.h"
 
 using namespace Upp;
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 ImageCtrlEx::ImageCtrlEx() {
     hittest = HTTRANSPARENT;

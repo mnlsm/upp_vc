@@ -24,17 +24,19 @@
 #include <lib/marisa/grimoire/io/writer.h>
 
 #ifdef flagNONAMESPACE
-#define NAMESPACE_UPPEX
+#define BEGIN_NAMESPACE_UPPEX
 #define END_UPPEX_NAMESPACE
 #define UPPEX
 #else
-#define NAMESPACE_UPPEX     namespace Uppex {
+#define BEGIN_NAMESPACE_UPPEX     namespace uppex {
 #define END_UPPEX_NAMESPACE };
-#define UPPEX               Uppex
+#define UPPEX               uppex
 #endif
 
-NAMESPACE_UPPEX
+#define LLOG(x)
 
+
+BEGIN_NAMESPACE_UPPEX
 
 typedef struct tagUppResData {
     Upp::String resname_;

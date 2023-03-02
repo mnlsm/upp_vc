@@ -4,7 +4,6 @@
 #include "../controls/container/ParentCtrlEx.h"
 
 using namespace Upp;
-#define LLOG(x)
 
 static Ctrl* GetSubCtrlByLayoutId(Ctrl* ctrl , const char *id) {
     for(Ctrl *subctrl = ctrl->GetFirstChild(); subctrl != NULL ; subctrl = subctrl->GetNext()) {
@@ -18,7 +17,7 @@ static Ctrl* GetSubCtrlByLayoutId(Ctrl* ctrl , const char *id) {
     return NULL;
 }
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 Upp::Ctrl* SkinWnd::GetCtrlByLayoutId(const char *id) {
     if(GetLayoutId() == id) {
         return this;
@@ -41,8 +40,6 @@ void SkinWnd::OnSubCtrlCreate(Ctrl* ctrl, const Upp::XmlNode &node) {
     String layid = ctrl->GetLayoutId();
     if(tag == "Button") {
         Upp::Button* button = dynamic_cast<Upp::Button*>(ctrl);
-        //String attrVal = node.Attr("label");
-        //if(!attrVal.IsEmpty()) button->SetLabel(attrVal);
         if(layid == "sys_closebtn") {
             String style = node.Attr("style");
             UpdateSysButtonStyle(button, style);

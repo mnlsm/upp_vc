@@ -7,7 +7,7 @@
 
 
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 class SkinMgr
         : Upp::NoCopy {
@@ -49,7 +49,7 @@ END_UPPEX_NAMESPACE
 #ifdef flagNONAMESPACE
 #define theSkinMgr SkinMgr::GetInstance()
 #else
-#define theSkinMgr Uppex::SkinMgr::GetInstance()
+#define theSkinMgr uppex::SkinMgr::GetInstance()
 #endif
 
 #endif

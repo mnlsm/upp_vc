@@ -7,7 +7,7 @@
 
 #include "../SkinMgr.h"
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 class SkinWnd
         : public Upp::TopWindow {

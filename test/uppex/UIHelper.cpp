@@ -16,127 +16,33 @@
 using namespace Upp;
 
 namespace {
-class CStreamOnByteArray 
-    :public IStream {
-public:
-	BYTE *m_pArray;
-	DWORD m_dwRead;
-    DWORD m_dwLength;
-
-	CStreamOnByteArray(BYTE *pBytes, DWORD dwLen) throw() {
-		ATLASSERT(pBytes);
-		m_pArray = pBytes;
-        m_dwLength = dwLen;
-		m_dwRead = 0;
-	}
-
-	STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead) throw() {
-		if (!pv)
-			return E_INVALIDARG;
-		if (cb == 0)
-			return S_OK;
-		if (!m_pArray)
-			return E_UNEXPECTED;
-		BYTE *pCurr  = m_pArray;
-		pCurr += m_dwRead;
-		Checked::memcpy_s(pv, cb, pCurr, cb);
-		if (pcbRead)
-			*pcbRead = cb;
-		m_dwRead += cb;
-		return S_OK;
-	}
-
-	STDMETHOD(Write)(const void* , ULONG , ULONG* ) throw() {
-		return E_UNEXPECTED;
-	}
-
-	STDMETHOD(Seek)(LARGE_INTEGER diff, DWORD dwOrigin, ULARGE_INTEGER *pNewPos) throw()
-	{
-        if(STREAM_SEEK_CUR == dwOrigin) {
-            if(m_dwRead + diff.LowPart > m_dwLength) {
-                return E_FAIL;
-            }
-            m_dwRead = m_dwRead + diff.LowPart;
-        } else if(STREAM_SEEK_SET == dwOrigin) {
-            if(diff.LowPart > m_dwLength) {
-                return E_FAIL;
-            }
-            m_dwRead = diff.LowPart;
-        } else if(STREAM_SEEK_END == dwOrigin) {
-            if(diff.LowPart > m_dwLength) {
-                return E_FAIL;
-            }
-            m_dwRead = m_dwLength - diff.LowPart;
-        } else {
-            return E_FAIL;
+CComPtr<IStream> CreateImageStream(PBYTE buffer, DWORD bufferSize) {
+   CComPtr<IStream> stream;
+    HGLOBAL hGlobal = NULL;
+    do {
+        hGlobal = ::GlobalAlloc(GHND, bufferSize);
+        if (hGlobal == NULL) {
+            break;
         }
-        if(pNewPos != NULL) {
-            (*pNewPos).HighPart = 0;
-            (*pNewPos).LowPart = m_dwRead;
+        void* pBuffer = ::GlobalLock(hGlobal);
+        if (pBuffer == NULL) {
+            break;
         }
-		return S_OK;
-	}
-
-	STDMETHOD(SetSize)(ULARGE_INTEGER ) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(CopyTo)(IStream *, ULARGE_INTEGER , ULARGE_INTEGER *,
-		ULARGE_INTEGER *) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(Commit)(DWORD ) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(Revert)( void) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(LockRegion)(ULARGE_INTEGER , ULARGE_INTEGER , DWORD ) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(UnlockRegion)(ULARGE_INTEGER , ULARGE_INTEGER ,
-		DWORD ) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(Stat)(STATSTG *pstatstg, DWORD flags) throw() {
-        if(pstatstg != NULL) {
-            pstatstg->cbSize.HighPart = 0;
-            pstatstg->cbSize.LowPart = m_dwLength;
+        memcpy(pBuffer, buffer, bufferSize);
+        HRESULT hr = CreateStreamOnHGlobal(hGlobal, TRUE, &stream);
+        ::GlobalUnlock(hGlobal);
+        if (FAILED(hr)) {
+            break;
         }
-        return S_OK;
-		return E_NOTIMPL;
-	}
+        hGlobal = NULL;
+    } while (FALSE);
+    if (hGlobal) {
+        GlobalFree(hGlobal);
+    }
+    return stream;
+}
 
-	STDMETHOD(Clone)(IStream **) throw() {
-		return E_NOTIMPL;
-	}
-
-	STDMETHOD(QueryInterface)(REFIID iid, void **ppUnk) throw() {
-		*ppUnk = NULL;
-		if (::InlineIsEqualGUID(iid, IID_IUnknown) ||
-			::InlineIsEqualGUID(iid, IID_ISequentialStream) ||
-			::InlineIsEqualGUID(iid, IID_IStream)) {
-			*ppUnk = (void*)(IStream*)this;
-			AddRef();
-			return S_OK;
-		}
-		return E_NOINTERFACE;
-	}
-
-	ULONG STDMETHODCALLTYPE AddRef( void)  throw() {
-		return (ULONG)1;
-	}
-
-	ULONG STDMETHODCALLTYPE Release( void)  throw() {
-		return (ULONG)1;
-	}
-};
-
+    
 BOOL IsWindows7OrLater() {
     static OSVERSIONINFO* posver = NULL;
     ONCELOCK {
@@ -173,7 +79,7 @@ String AdjustFontFaceName(const String& id, String facename) {
 
 }
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 UIHelper::UIHelper() {
 }
@@ -1054,8 +960,8 @@ BOOL UIHelper::LoadGdiplusImageFromBuffer(PBYTE buffer, DWORD bufferSize,
         return FALSE;
     }
     do {
-        CStreamOnByteArray stream(buffer, bufferSize);
-        ret.reset(new Gdiplus::Bitmap((IStream*)&stream));
+        CComPtr<IStream> stream = CreateImageStream(buffer, bufferSize);
+        ret.reset(new Gdiplus::Bitmap(stream));
         if(ret.get() != NULL && ret->GetLastStatus() != Gdiplus::Ok ) {
 	        ret.reset();
             break;

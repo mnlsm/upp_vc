@@ -3,7 +3,7 @@
 
 #include "../../SkinMgr.h"
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 
 class ImageCtrlEx
         : public Upp::ImageCtrl {

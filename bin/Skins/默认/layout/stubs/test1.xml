@@ -1,0 +1,9 @@
+<ParentCtrlStub>
+  <EditField layidc='inputname' HCenterPos='100,0' TopPos='73,20' tabstop='true'/>
+  <WithDropChoice layidc='userlist' HCenterPos='100,0' TopPos='123,20' tabstop='true'/>
+  <Button layidc='testbtn' label='测试' HSizePos='30,30' TopPos='153,24' tabstop='true'/>
+  <ImageCtrlEx layidc='image1' src='res/image/search.png' HCenterPos='96,0' TopPos='173,32' tabstop='false'/>
+  <ImageCtrlEx layidc='image2' src='res/image/backup_sms.png' HCenterPos='88,0' TopPos='213,88' tabstop='false'/>
+  <ImageCtrlEx layidc='image3' src='res/image/fw_clear_rock.png' HCenterPos='52,0' TopPos='313,98' tabstop='false'/>
+  <StaticCtrlEx layidc='text1' text='测试' font='sys_font12' tclrid='color_blue' align='center' valign='center' HCenterPos='36,0' TopPos='423,20' tabstop='false'/>
+</ParentCtrlStub>

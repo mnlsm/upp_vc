@@ -3,7 +3,7 @@
 
 #include "../../SkinMgr.h"
 
-NAMESPACE_UPPEX
+BEGIN_NAMESPACE_UPPEX
 class StaticCtrlEx
         : public Upp::Label {
 public:
