@@ -51,6 +51,11 @@ public:
         return GetBValue(Get());
     }
 
+    int GetA() const {
+        return (LOBYTE((Get())>>24));
+    }
+
+
     bool IsNullInstance() const {
         return color == 0xffffffff;
     }

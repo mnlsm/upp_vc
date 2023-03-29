@@ -50,7 +50,7 @@ protected:
     int delayrefreshnum_;
 
 public:
-    virtual LRESULT  WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
     virtual void WndInvalidateRect(const Upp::Rect& r);
     virtual void WndScrollView(const Upp::Rect& r, int dx, int dy);
     virtual Upp::Ctrl* GetCtrlByLayoutId(const char *id);
